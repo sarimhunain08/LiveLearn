@@ -44,8 +44,8 @@ export default function TeacherStudents() {
   return (
     <DashboardLayout navItems={navItems} title="Students">
       <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
-        <div className="border-b border-border px-6 py-4">
-          <h2 className="text-lg font-semibold text-foreground">All Students ({students.length})</h2>
+        <div className="border-b border-border px-4 sm:px-6 py-4">
+          <h2 className="text-base sm:text-lg font-semibold text-foreground">All Students ({students.length})</h2>
         </div>
         {students.length === 0 ? (
           <div className="py-16 text-center">
@@ -53,37 +53,68 @@ export default function TeacherStudents() {
             <p className="text-muted-foreground">No students enrolled yet</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="dashboard-table">
-              <thead>
-                <tr><th>Name</th><th>Email</th><th>Enrolled Classes</th><th>Type</th><th>Status</th></tr>
-              </thead>
-              <tbody>
-                {students.map((s) => (
-                  <tr key={s._id}>
-                    <td className="font-medium text-foreground flex items-center gap-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
-                        {s.name?.charAt(0) || "?"}
-                      </div>
-                      {s.name}
-                    </td>
-                    <td className="text-muted-foreground">{s.email}</td>
-                    <td className="text-muted-foreground">{s.enrolledClasses || 0}</td>
-                    <td>
-                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                        s.type === "enrolled"
-                          ? "bg-primary/10 text-primary"
-                          : "bg-accent/10 text-accent"
+          <>
+            {/* Mobile card view */}
+            <div className="sm:hidden divide-y divide-border">
+              {students.map((s) => (
+                <div key={s._id} className="p-4 space-y-2">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary flex-shrink-0">
+                      {s.name?.charAt(0) || "?"}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-medium text-foreground text-sm truncate">{s.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{s.email}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+                        s.type === "enrolled" ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent"
                       }`}>
                         {s.type === "enrolled" ? "Enrolled" : "Subscriber"}
                       </span>
-                    </td>
-                    <td><StatusBadge status="Active" /></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                      <span className="text-xs text-muted-foreground">{s.enrolledClasses || 0} classes</span>
+                    </div>
+                    <StatusBadge status="Active" />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop table view */}
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="dashboard-table">
+                <thead>
+                  <tr><th>Name</th><th>Email</th><th>Enrolled Classes</th><th>Type</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                  {students.map((s) => (
+                    <tr key={s._id}>
+                      <td className="font-medium text-foreground">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary flex-shrink-0">
+                            {s.name?.charAt(0) || "?"}
+                          </div>
+                          {s.name}
+                        </div>
+                      </td>
+                      <td className="text-muted-foreground">{s.email}</td>
+                      <td className="text-muted-foreground">{s.enrolledClasses || 0}</td>
+                      <td>
+                        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                          s.type === "enrolled" ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent"
+                        }`}>
+                          {s.type === "enrolled" ? "Enrolled" : "Subscriber"}
+                        </span>
+                      </td>
+                      <td><StatusBadge status="Active" /></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
     </DashboardLayout>

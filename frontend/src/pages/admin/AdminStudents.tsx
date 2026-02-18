@@ -33,7 +33,30 @@ export default function AdminStudents() {
       </div>
 
       <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile card view */}
+        <div className="sm:hidden divide-y divide-border">
+          {students.map((s) => (
+            <div key={s.id} className="p-4 space-y-2">
+              <div className="flex items-center gap-3">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
+                  {s.name.charAt(0)}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium text-foreground text-sm truncate">{s.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">{s.email}</p>
+                </div>
+                <StatusBadge status={s.status} />
+              </div>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground pl-11">
+                <span>Enrolled: {s.enrolled}</span>
+                <span>Attended: {s.attended}</span>
+                <span>Joined: {s.joined}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* Desktop table */}
+        <div className="hidden sm:block overflow-x-auto">
           <table className="dashboard-table">
             <thead>
               <tr><th>Name</th><th>Email</th><th>Enrolled</th><th>Attended</th><th>Status</th><th>Joined</th></tr>

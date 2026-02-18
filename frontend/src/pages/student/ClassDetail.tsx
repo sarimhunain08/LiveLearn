@@ -216,15 +216,15 @@ export default function ClassDetail() {
                   <h3 className="text-sm font-semibold text-muted-foreground mb-4 uppercase tracking-wider">
                     Class starts in
                   </h3>
-                  <div className="grid grid-cols-4 gap-2 mb-6">
+                  <div className="grid grid-cols-4 gap-1.5 sm:gap-2 mb-6">
                     {[
                       { value: countdown.days, label: "Days" },
                       { value: countdown.hours, label: "Hours" },
                       { value: countdown.minutes, label: "Min" },
                       { value: countdown.seconds, label: "Sec" },
                     ].map((item) => (
-                      <div key={item.label} className="rounded-lg bg-muted/50 p-3">
-                        <p className="text-2xl font-bold text-foreground">
+                      <div key={item.label} className="rounded-lg bg-muted/50 p-2 sm:p-3">
+                        <p className="text-lg sm:text-2xl font-bold text-foreground">
                           {String(item.value).padStart(2, "0")}
                         </p>
                         <p className="text-xs text-muted-foreground">{item.label}</p>

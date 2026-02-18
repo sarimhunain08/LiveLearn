@@ -13,7 +13,7 @@ export default function StatCard({ label, value, icon, trend, colorClass = "bg-p
     <div className="stat-card flex items-start justify-between">
       <div>
         <p className="text-sm text-muted-foreground">{label}</p>
-        <p className="mt-1 text-3xl font-bold text-foreground">{value}</p>
+        <p className="mt-1 text-2xl sm:text-3xl font-bold text-foreground">{value}</p>
         {trend && <p className="mt-1 text-xs text-success font-medium">{trend}</p>}
       </div>
       <div className={`flex h-11 w-11 items-center justify-center rounded-lg ${colorClass}`}>

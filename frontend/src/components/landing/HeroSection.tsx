@@ -7,7 +7,7 @@ export default function HeroSection() {
   return (
     <section className="gradient-hero overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
+        <div className="grid items-center gap-12 md:grid-cols-2">
           <div className="animate-fade-in">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">
               <span className="h-2 w-2 rounded-full bg-success animate-pulse-live" />
@@ -37,7 +37,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="animate-slide-up hidden lg:block">
+          <div className="animate-slide-up hidden md:block">
             <div className="relative">
               <div className="absolute -inset-4 rounded-2xl bg-primary/5 blur-3xl" />
               <img

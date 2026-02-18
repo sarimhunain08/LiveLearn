@@ -42,7 +42,7 @@ const Signup = () => {
   const strengthColor = strengthPercent < 40 ? "bg-destructive" : strengthPercent < 70 ? "bg-warning" : "bg-success";
 
   return (
-    <div className="flex min-h-screen items-center justify-center gradient-hero px-4 py-12">
+    <div className="flex h-screen overflow-y-auto items-center justify-center gradient-hero px-4 py-12">
       <div className="w-full max-w-md animate-fade-in">
         <div className="mb-8 text-center">
           <Link to="/" className="inline-flex items-center gap-2 mb-6">

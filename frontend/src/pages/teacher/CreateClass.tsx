@@ -107,7 +107,7 @@ export default function CreateClass() {
   return (
     <DashboardLayout navItems={navItems} title="Create Class">
       <div className="mx-auto max-w-2xl">
-        <form onSubmit={handleSubmit} className="space-y-6 pb-8">
+        <form onSubmit={handleSubmit} className="space-y-6 pb-4">
           {/* Basic Info */}
           <div className="rounded-xl border border-border bg-card p-4 sm:p-6 shadow-card">
             <h2 className="mb-4 text-lg font-semibold text-foreground">Basic Information</h2>

@@ -27,7 +27,7 @@ export default function AdminDashboard() {
   return (
     <DashboardLayout navItems={navItems} title="Admin Dashboard">
       {/* Stats */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 mb-8">
+      <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 mb-8">
         <StatCard label="Teachers" value={48} icon={<GraduationCap className="h-5 w-5" />} trend="+3 this week" />
         <StatCard label="Students" value={1240} icon={<Users className="h-5 w-5" />} colorClass="bg-accent/10 text-accent" trend="+28 this week" />
         <StatCard label="Total Classes" value={312} icon={<BookOpen className="h-5 w-5" />} colorClass="bg-success/10 text-success" />

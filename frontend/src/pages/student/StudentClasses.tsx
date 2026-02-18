@@ -57,27 +57,49 @@ export default function StudentClasses() {
         <p className="text-muted-foreground">{emptyMsg}</p>
       </div>
     ) : (
-      <div className="overflow-x-auto">
-        <table className="dashboard-table">
-          <thead><tr><th>Class</th><th>Teacher</th><th>Subject</th><th>Date</th><th>Time</th><th>Status</th></tr></thead>
-          <tbody>
-            {list.map(c => (
-              <tr key={c._id}>
-                <td className="font-medium text-foreground">
-                  <Link to={`/student/class/${c._id}`} className="hover:text-primary transition-colors">
-                    {c.title}
-                  </Link>
-                </td>
-                <td className="text-muted-foreground">{c.teacher?.name || "Unknown"}</td>
-                <td><span className="rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">{capitalizeFirst(c.subject)}</span></td>
-                <td className="text-muted-foreground">{formatClassDate(c)}</td>
-                <td className="text-muted-foreground">{formatClassTime(c)}</td>
-                <td><StatusBadge status={c.status === "live" ? "Live" : c.status === "scheduled" ? "Scheduled" : "Completed"} /></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <>
+        {/* Mobile card view */}
+        <div className="sm:hidden divide-y divide-border">
+          {list.map(c => (
+            <Link key={c._id} to={`/student/class/${c._id}`} className="block p-4 space-y-2 hover:bg-muted/30 transition-colors">
+              <div className="flex items-center justify-between">
+                <h4 className="font-medium text-foreground text-sm">{c.title}</h4>
+                <StatusBadge status={c.status === "live" ? "Live" : c.status === "scheduled" ? "Scheduled" : "Completed"} />
+              </div>
+              <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+                <span>{c.teacher?.name || "Unknown"}</span>
+                <span className="rounded-md bg-primary/10 px-2 py-0.5 font-medium text-primary">{capitalizeFirst(c.subject)}</span>
+              </div>
+              <div className="text-xs text-muted-foreground">
+                {formatClassDate(c)} · {formatClassTime(c)}
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Desktop table view */}
+        <div className="hidden sm:block overflow-x-auto">
+          <table className="dashboard-table">
+            <thead><tr><th>Class</th><th>Teacher</th><th>Subject</th><th>Date</th><th>Time</th><th>Status</th></tr></thead>
+            <tbody>
+              {list.map(c => (
+                <tr key={c._id}>
+                  <td className="font-medium text-foreground">
+                    <Link to={`/student/class/${c._id}`} className="hover:text-primary transition-colors">
+                      {c.title}
+                    </Link>
+                  </td>
+                  <td className="text-muted-foreground">{c.teacher?.name || "Unknown"}</td>
+                  <td><span className="rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">{capitalizeFirst(c.subject)}</span></td>
+                  <td className="text-muted-foreground">{formatClassDate(c)}</td>
+                  <td className="text-muted-foreground">{formatClassTime(c)}</td>
+                  <td><StatusBadge status={c.status === "live" ? "Live" : c.status === "scheduled" ? "Scheduled" : "Completed"} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </>
     )
   );
 

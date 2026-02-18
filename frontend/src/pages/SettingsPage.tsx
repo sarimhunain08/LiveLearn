@@ -54,13 +54,13 @@ export default function SettingsPage() {
   return (
     <DashboardLayout navItems={navItems} title="Settings">
       <div className="grid gap-6 lg:grid-cols-[220px_1fr]">
-        {/* Settings sidebar */}
-        <div className="space-y-1">
+        {/* Settings sidebar - horizontal scroll on mobile, vertical on lg */}
+        <div className="flex gap-1 overflow-x-auto pb-2 lg:flex-col lg:overflow-x-visible lg:pb-0">
           {settingsTabs.map(t => (
             <button
               key={t.id}
               onClick={() => setActiveTab(t.id)}
-              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+              className={`flex shrink-0 items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors lg:w-full lg:gap-3 ${
                 activeTab === t.id ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}
             >

@@ -33,7 +33,35 @@ export default function AdminTeachers() {
       </div>
 
       <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile card view */}
+        <div className="sm:hidden divide-y divide-border">
+          {teachers.map((t) => (
+            <div key={t.id} className="p-4 space-y-2">
+              <div className="flex items-center gap-3">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
+                  {t.name.charAt(0)}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium text-foreground text-sm truncate">{t.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">{t.email}</p>
+                </div>
+                <StatusBadge status={t.status} />
+              </div>
+              <div className="flex flex-wrap gap-1 pl-11">
+                {t.subjects.map(s => (
+                  <span key={s} className="rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">{s}</span>
+                ))}
+              </div>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground pl-11">
+                <span>Classes: {t.classes}</span>
+                <span>Students: {t.students}</span>
+                <span>Joined: {t.joined}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* Desktop table */}
+        <div className="hidden sm:block overflow-x-auto">
           <table className="dashboard-table">
             <thead>
               <tr><th>Name</th><th>Email</th><th>Subjects</th><th>Classes</th><th>Students</th><th>Status</th><th>Joined</th></tr>

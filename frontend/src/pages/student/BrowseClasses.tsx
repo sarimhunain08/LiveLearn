@@ -95,7 +95,7 @@ export default function BrowseClasses() {
           />
         </div>
         <Select value={selectedSubject} onValueChange={setSelectedSubject}>
-          <SelectTrigger className="w-40"><SelectValue placeholder="Subject" /></SelectTrigger>
+          <SelectTrigger className="w-full sm:w-40"><SelectValue placeholder="Subject" /></SelectTrigger>
           <SelectContent>
             {subjects.map(s => (
               <SelectItem key={s} value={s.toLowerCase()}>{s}</SelectItem>

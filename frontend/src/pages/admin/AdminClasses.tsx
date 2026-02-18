@@ -42,7 +42,26 @@ export default function AdminClasses() {
       </div>
 
       <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile card view */}
+        <div className="sm:hidden divide-y divide-border">
+          {classes.map((c) => (
+            <div key={c.id} className="p-4 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="font-medium text-foreground text-sm">{c.title}</span>
+                <StatusBadge status={c.status} />
+              </div>
+              <p className="text-xs text-muted-foreground">{c.teacher}</p>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                <span>{c.date}</span>
+                <span>{c.duration}</span>
+                <span>Enrolled: {c.enrolled}</span>
+                <span>Attended: {c.attended}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* Desktop table */}
+        <div className="hidden sm:block overflow-x-auto">
           <table className="dashboard-table">
             <thead>
               <tr><th>Class</th><th>Teacher</th><th>Date</th><th>Enrolled</th><th>Attended</th><th>Duration</th><th>Status</th></tr>

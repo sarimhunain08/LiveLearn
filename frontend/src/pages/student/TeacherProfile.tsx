@@ -201,7 +201,20 @@ export default function TeacherProfile() {
             Completed Classes ({completedClasses.length})
           </h3>
           <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
-            <div className="overflow-x-auto">
+            {/* Mobile card view */}
+            <div className="sm:hidden divide-y divide-border">
+              {completedClasses.map((c: any) => (
+                <div key={c._id} className="p-4 space-y-1">
+                  <p className="font-medium text-foreground text-sm">{c.title}</p>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <span className="rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">{capitalizeFirst(c.subject)}</span>
+                    <span>{formatClassDate(c)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {/* Desktop table */}
+            <div className="hidden sm:block overflow-x-auto">
               <table className="dashboard-table">
                 <thead><tr><th>Class</th><th>Subject</th><th>Date</th></tr></thead>
                 <tbody>

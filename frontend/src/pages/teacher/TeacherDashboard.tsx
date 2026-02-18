@@ -115,7 +115,7 @@ export default function TeacherDashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid gap-4 grid-cols-2 lg:grid-cols-5 mb-8">
+      <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 mb-8">
         <StatCard label="Total Students" value={stats.totalStudents} icon={<Users className="h-5 w-5" />} />
         <StatCard label="Upcoming" value={stats.upcomingClasses} icon={<Calendar className="h-5 w-5" />} colorClass="bg-accent/10 text-accent" />
         <StatCard label="Completed" value={stats.completedClasses} icon={<TrendingUp className="h-5 w-5" />} colorClass="bg-success/10 text-success" />
