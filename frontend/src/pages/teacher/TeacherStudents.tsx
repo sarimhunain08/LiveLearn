@@ -56,7 +56,7 @@ export default function TeacherStudents() {
           <div className="overflow-x-auto">
             <table className="dashboard-table">
               <thead>
-                <tr><th>Name</th><th>Email</th><th>Enrolled Classes</th><th>Status</th></tr>
+                <tr><th>Name</th><th>Email</th><th>Enrolled Classes</th><th>Type</th><th>Status</th></tr>
               </thead>
               <tbody>
                 {students.map((s) => (
@@ -69,6 +69,15 @@ export default function TeacherStudents() {
                     </td>
                     <td className="text-muted-foreground">{s.email}</td>
                     <td className="text-muted-foreground">{s.enrolledClasses || 0}</td>
+                    <td>
+                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                        s.type === "enrolled"
+                          ? "bg-primary/10 text-primary"
+                          : "bg-accent/10 text-accent"
+                      }`}>
+                        {s.type === "enrolled" ? "Enrolled" : "Subscriber"}
+                      </span>
+                    </td>
                     <td><StatusBadge status="Active" /></td>
                   </tr>
                 ))}

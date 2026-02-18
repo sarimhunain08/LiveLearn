@@ -56,18 +56,19 @@ exports.getTeachers = async (req, res, next) => {
     }
 
     const teachers = await User.find(query).select(
-      "name email avatar bio createdAt"
+      "name email avatar bio createdAt subscribers"
     );
 
     // Get class counts and subscriber counts for each teacher
     const teacherData = await Promise.all(
       teachers.map(async (teacher) => {
         const classCount = await Class.countDocuments({ teacher: teacher._id });
-        const subscriberCount = await User.countDocuments({ subscribedTeachers: teacher._id });
+        const subscriberCount = teacher.subscribers?.length || 0;
         return {
           ...teacher.toObject(),
           classCount,
           subscriberCount,
+          subscribers: undefined, // don't send full array to client
         };
       })
     );
@@ -99,7 +100,8 @@ exports.getTeacherProfile = async (req, res, next) => {
       .select("title subject date time duration status maxStudents enrolledStudents")
       .sort({ date: 1 });
 
-    const subscriberCount = await User.countDocuments({ subscribedTeachers: req.params.id });
+    const teacherDoc = await User.findById(req.params.id);
+    const subscriberCount = teacherDoc?.subscribers?.length || 0;
 
     res.json({
       success: true,
@@ -127,12 +129,20 @@ exports.subscribeToTeacher = async (req, res, next) => {
 
     const student = await User.findById(req.user.id);
 
+    // Check if already subscribed (check both sides)
     if (student.subscribedTeachers.includes(req.params.id)) {
       return res.status(400).json({ success: false, message: "Already subscribed to this teacher" });
     }
 
+    // Add teacher to student's subscribedTeachers
     student.subscribedTeachers.push(req.params.id);
     await student.save();
+
+    // Add student to teacher's subscribers
+    if (!teacher.subscribers.includes(req.user.id)) {
+      teacher.subscribers.push(req.user.id);
+      await teacher.save();
+    }
 
     res.json({ success: true, message: "Subscribed successfully" });
   } catch (error) {
@@ -151,10 +161,20 @@ exports.unsubscribeFromTeacher = async (req, res, next) => {
       return res.status(400).json({ success: false, message: "Not subscribed to this teacher" });
     }
 
+    // Remove teacher from student's subscribedTeachers
     student.subscribedTeachers = student.subscribedTeachers.filter(
       (id) => id.toString() !== req.params.id
     );
     await student.save();
+
+    // Remove student from teacher's subscribers
+    const teacher = await User.findById(req.params.id);
+    if (teacher) {
+      teacher.subscribers = teacher.subscribers.filter(
+        (id) => id.toString() !== req.user.id
+      );
+      await teacher.save();
+    }
 
     res.json({ success: true, message: "Unsubscribed successfully" });
   } catch (error) {

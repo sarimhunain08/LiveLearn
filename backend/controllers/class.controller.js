@@ -238,7 +238,7 @@ exports.getClassStudents = async (req, res, next) => {
   }
 };
 
-// @desc    Get teacher's all students (across all classes)
+// @desc    Get teacher's all students (enrolled + subscribed)
 // @route   GET /api/classes/my-students
 // @access  Private (Teacher)
 exports.getMyStudents = async (req, res, next) => {
@@ -256,11 +256,32 @@ exports.getMyStudents = async (req, res, next) => {
           studentMap.set(student._id.toString(), {
             ...student.toObject(),
             enrolledClasses: 1,
+            type: "enrolled",
           });
         } else {
           studentMap.get(student._id.toString()).enrolledClasses += 1;
         }
       });
+    });
+
+    // Also get students who subscribed to this teacher (from teacher's subscribers field)
+    const teacher = await User.findById(req.user.id).populate(
+      "subscribers",
+      "name email avatar createdAt"
+    );
+    const subscribers = teacher?.subscribers || [];
+
+    subscribers.forEach((sub) => {
+      if (!studentMap.has(sub._id.toString())) {
+        studentMap.set(sub._id.toString(), {
+          ...sub.toObject(),
+          enrolledClasses: 0,
+          type: "subscriber",
+        });
+      } else {
+        // Student is both enrolled and subscribed
+        studentMap.get(sub._id.toString()).type = "enrolled";
+      }
     });
 
     const students = Array.from(studentMap.values());
