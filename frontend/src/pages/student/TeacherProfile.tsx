@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Home, BookOpen, Search, Clock, Settings, Loader2, ArrowLeft, Users, UserPlus, UserCheck } from "lucide-react";
+import { Home, BookOpen, Search, Settings, Loader2, ArrowLeft, Users, UserPlus, UserCheck, GraduationCap } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatusBadge from "@/components/dashboard/StatusBadge";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ const navItems = [
   { label: "Dashboard", path: "/student/dashboard", icon: <Home className="h-4 w-4" /> },
   { label: "My Classes", path: "/student/classes", icon: <BookOpen className="h-4 w-4" /> },
   { label: "Browse Teachers", path: "/student/browse", icon: <Search className="h-4 w-4" /> },
-  { label: "Schedule", path: "/student/schedule", icon: <Clock className="h-4 w-4" /> },
+  { label: "My Teachers", path: "/student/my-teachers", icon: <GraduationCap className="h-4 w-4" /> },
   { label: "Settings", path: "/student/settings", icon: <Settings className="h-4 w-4" /> },
 ];
 
@@ -124,7 +124,11 @@ export default function TeacherProfile() {
           </div>
           <div className="flex-1">
             <h2 className="text-2xl font-bold text-foreground">{teacher.name}</h2>
-            <p className="text-muted-foreground">{teacher.email}</p>
+            {teacher.country && (
+              <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                <span>📍</span> {teacher.country}
+              </p>
+            )}
             {teacher.bio && <p className="mt-2 text-sm text-muted-foreground">{teacher.bio}</p>}
             <div className="mt-3 flex items-center gap-4 text-sm text-muted-foreground">
               <span className="flex items-center gap-1">

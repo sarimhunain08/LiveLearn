@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Home, BookOpen, Search, Clock, Settings, Loader2 } from "lucide-react";
+import { Home, BookOpen, Search, Settings, Loader2, GraduationCap } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +13,7 @@ const navItems = [
   { label: "Dashboard", path: "/student/dashboard", icon: <Home className="h-4 w-4" /> },
   { label: "My Classes", path: "/student/classes", icon: <BookOpen className="h-4 w-4" /> },
   { label: "Browse Classes", path: "/student/browse", icon: <Search className="h-4 w-4" /> },
-  { label: "Schedule", path: "/student/schedule", icon: <Clock className="h-4 w-4" /> },
+  { label: "My Teachers", path: "/student/my-teachers", icon: <GraduationCap className="h-4 w-4" /> },
   { label: "Settings", path: "/student/settings", icon: <Settings className="h-4 w-4" /> },
 ];
 

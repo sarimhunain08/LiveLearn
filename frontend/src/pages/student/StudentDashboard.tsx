@@ -13,13 +13,9 @@ const navItems = [
   { label: "Dashboard", path: "/student/dashboard", icon: <Home className="h-4 w-4" /> },
   { label: "My Classes", path: "/student/classes", icon: <BookOpen className="h-4 w-4" /> },
   { label: "Browse Teachers", path: "/student/browse", icon: <Search className="h-4 w-4" /> },
-  { label: "Schedule", path: "/student/schedule", icon: <Clock className="h-4 w-4" /> },
+  { label: "My Teachers", path: "/student/my-teachers", icon: <GraduationCap className="h-4 w-4" /> },
   { label: "Settings", path: "/student/settings", icon: <Settings className="h-4 w-4" /> },
 ];
-
-function capitalizeFirst(s: string) {
-  return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
-}
 
 export default function StudentDashboard() {
   const { user } = useAuth();
@@ -148,4 +144,8 @@ export default function StudentDashboard() {
       )}
     </DashboardLayout>
   );
+}
+
+function capitalizeFirst(s: string) {
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
 }

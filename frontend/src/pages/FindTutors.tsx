@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Search,
   Globe,
@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Navbar from "@/components/landing/Navbar";
 import { api } from "@/lib/api";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Teacher {
   _id: string;
@@ -187,12 +188,21 @@ const AvatarPlaceholder = ({ name }: { name: string }) => {
 };
 
 export default function FindTutors() {
+  const { user, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [subject, setSubject] = useState("");
   const [country, setCountry] = useState("");
   const [language, setLanguage] = useState("");
+
+  const getProfilePath = (teacherId: string) => {
+    if (isAuthenticated && user?.role === "student") {
+      return `/student/teacher/${teacherId}`;
+    }
+    return `/login?redirect=/student/teacher/${teacherId}`;
+  };
 
   const fetchTeachers = async () => {
     setLoading(true);
@@ -338,7 +348,7 @@ export default function FindTutors() {
                   <div className="flex-1 min-w-0">
                     {/* Name + Country */}
                     <div className="flex items-center gap-2 flex-wrap">
-                      <Link to={`/student/teacher/${teacher._id}`}>
+                      <Link to={getProfilePath(teacher._id)}>
                         <h3 className="text-lg font-bold text-foreground hover:text-primary transition-colors">
                           {teacher.name}
                         </h3>
@@ -393,7 +403,7 @@ export default function FindTutors() {
                     )}
 
                     {/* Learn more link */}
-                    <Link to={`/student/teacher/${teacher._id}`} className="mt-1 inline-block text-sm font-medium text-primary hover:underline">
+                    <Link to={getProfilePath(teacher._id)} className="mt-1 inline-block text-sm font-medium text-primary hover:underline">
                       Learn more
                     </Link>
                   </div>
@@ -420,12 +430,12 @@ export default function FindTutors() {
 
                     {/* CTA Buttons */}
                     <div className="flex flex-col gap-2 w-full sm:mt-auto">
-                      <Link to={`/student/teacher/${teacher._id}`} className="w-full">
+                      <Link to={getProfilePath(teacher._id)} className="w-full">
                         <Button className="w-full gradient-primary text-primary-foreground border-0 rounded-xl h-10 font-semibold text-sm">
                           Book trial lesson
                         </Button>
                       </Link>
-                      <Link to={`/student/teacher/${teacher._id}`} className="w-full">
+                      <Link to={getProfilePath(teacher._id)} className="w-full">
                         <Button variant="outline" className="w-full rounded-xl h-10 text-sm">
                           View profile
                         </Button>

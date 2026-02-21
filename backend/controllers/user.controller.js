@@ -73,7 +73,7 @@ exports.getTeachers = async (req, res, next) => {
     }
 
     const teachers = await Teacher.find(query).select(
-      "name email avatar bio country languages subjects hourlyRate createdAt subscribers"
+      "name avatar bio country languages subjects hourlyRate createdAt subscribers"
     );
 
     // Get class counts and subscriber counts for each teacher
@@ -102,7 +102,7 @@ exports.getTeachers = async (req, res, next) => {
 exports.getTeacherProfile = async (req, res, next) => {
   try {
     const teacher = await Teacher.findById(req.params.id).select(
-      "name email avatar bio country languages subjects hourlyRate createdAt subscribers"
+      "name avatar bio country languages subjects hourlyRate createdAt subscribers"
     );
 
     if (!teacher) {
@@ -201,10 +201,46 @@ exports.getSubscribedTeachers = async (req, res, next) => {
   try {
     const student = await Student.findById(req.user.id).populate(
       "subscribedTeachers",
-      "name email avatar bio"
+      "name avatar bio country languages subjects hourlyRate subscribers"
     );
 
     res.json({ success: true, data: student.subscribedTeachers });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get subscribed teachers with their classes
+// @route   GET /api/users/subscribed-teachers/details
+// @access  Private (Student)
+exports.getSubscribedTeachersWithClasses = async (req, res, next) => {
+  try {
+    const student = await Student.findById(req.user.id).populate(
+      "subscribedTeachers",
+      "name avatar bio country languages subjects hourlyRate subscribers"
+    );
+
+    const teachersWithClasses = await Promise.all(
+      (student.subscribedTeachers || []).map(async (teacher) => {
+        const classes = await Class.find({ teacher: teacher._id })
+          .select("title subject date time duration status maxStudents enrolledStudents")
+          .sort({ date: -1 });
+
+        const now = new Date();
+        const upcoming = classes.filter(c => c.status === "scheduled" || c.status === "live");
+        const completed = classes.filter(c => c.status === "completed");
+        const previous = classes.filter(c => c.status === "cancelled");
+
+        return {
+          ...teacher.toObject(),
+          subscriberCount: teacher.subscribers?.length || 0,
+          classCount: classes.length,
+          classes: { upcoming, completed, previous },
+        };
+      })
+    );
+
+    res.json({ success: true, data: teachersWithClasses });
   } catch (error) {
     next(error);
   }

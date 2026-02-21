@@ -23,6 +23,7 @@ import BrowseTeachers from "./pages/student/BrowseTeachers";
 import StudentClasses from "./pages/student/StudentClasses";
 import ClassDetail from "./pages/student/ClassDetail";
 import TeacherProfile from "./pages/student/TeacherProfile";
+import MyTeachers from "./pages/student/MyTeachers";
 import MeetingRoom from "./pages/MeetingRoom";
 
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -61,11 +62,11 @@ const App = () => (
             {/* Student */}
             <Route path="/student/dashboard" element={<StudentDashboard />} />
             <Route path="/student/browse" element={<BrowseTeachers />} />
+            <Route path="/student/my-teachers" element={<MyTeachers />} />
             <Route path="/student/teacher/:id" element={<TeacherProfile />} />
             <Route path="/student/classes" element={<StudentClasses />} />
             <Route path="/student/class/:id" element={<ClassDetail />} />
             <Route path="/student/meeting/:id" element={<MeetingRoom />} />
-            <Route path="/student/schedule" element={<StudentDashboard />} />
             <Route path="/student/settings" element={<SettingsPage />} />
 
             {/* Admin */}

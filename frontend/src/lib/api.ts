@@ -125,6 +125,10 @@ class ApiClient {
     return this.request<{ success: boolean; data: any[] }>("/users/subscribed-teachers");
   }
 
+  async getSubscribedTeachersWithClasses() {
+    return this.request<{ success: boolean; data: any[] }>("/users/subscribed-teachers/details");
+  }
+
   // Classes - Public
   async getClasses(params?: { subject?: string; search?: string; status?: string; page?: number }) {
     const searchParams = new URLSearchParams();

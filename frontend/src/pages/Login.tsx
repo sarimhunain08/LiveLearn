@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { GraduationCap, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -20,10 +21,16 @@ const Login = () => {
     setIsLoading(true);
     try {
       const user = await login(email, password);
-      // Redirect based on actual user role from backend
-      if (user.role === "teacher") navigate("/teacher/dashboard");
-      else if (user.role === "admin") navigate("/admin/dashboard");
-      else navigate("/student/dashboard");
+      const redirectTo = searchParams.get("redirect");
+      if (redirectTo) {
+        navigate(redirectTo);
+      } else if (user.role === "teacher") {
+        navigate("/teacher/dashboard");
+      } else if (user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/student/dashboard");
+      }
     } catch (error: any) {
       toast({
         title: "Login Failed",
