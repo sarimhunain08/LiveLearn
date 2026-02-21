@@ -17,6 +17,12 @@ export default function Navbar() {
         </Link>
 
         <div className="hidden items-center gap-3 md:flex">
+          <Link to="/find-tutors">
+            <Button variant="ghost" size="sm">Find Tutors</Button>
+          </Link>
+          <Link to="/become-a-tutor">
+            <Button variant="ghost" size="sm">Become a Tutor</Button>
+          </Link>
           <Link to="/login">
             <Button variant="ghost" size="sm">Sign In</Button>
           </Link>
@@ -35,6 +41,12 @@ export default function Navbar() {
       {open && (
         <div className="border-t border-border bg-card px-4 py-4 md:hidden">
           <div className="flex flex-col gap-2">
+            <Link to="/find-tutors" onClick={() => setOpen(false)}>
+              <Button variant="ghost" className="w-full justify-start">Find Tutors</Button>
+            </Link>
+            <Link to="/become-a-tutor" onClick={() => setOpen(false)}>
+              <Button variant="ghost" className="w-full justify-start">Become a Tutor</Button>
+            </Link>
             <Link to="/login" onClick={() => setOpen(false)}>
               <Button variant="ghost" className="w-full justify-start">Sign In</Button>
             </Link>

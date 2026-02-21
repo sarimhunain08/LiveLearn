@@ -1,4 +1,6 @@
 const User = require("../models/User");
+const Teacher = require("../models/Teacher");
+const Student = require("../models/Student");
 
 // Helper: send token response
 const sendTokenResponse = (user, statusCode, res) => {
@@ -17,6 +19,11 @@ const sendTokenResponse = (user, statusCode, res) => {
     email: user.email,
     role: user.role,
     avatar: user.avatar,
+    country: user.country,
+    languages: user.languages,
+    subjects: user.subjects,
+    bio: user.bio,
+    hourlyRate: user.hourlyRate,
   };
 
   res.status(statusCode).cookie("token", token, options).json({
@@ -31,7 +38,7 @@ const sendTokenResponse = (user, statusCode, res) => {
 // @access  Public
 exports.signup = async (req, res, next) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, country, languages, subjects, bio, hourlyRate } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -44,7 +51,23 @@ exports.signup = async (req, res, next) => {
       return res.status(400).json({ success: false, message: "Invalid role" });
     }
 
-    const user = await User.create({ name, email, password, role: role || "student" });
+    const baseData = { name, email, password };
+
+    let user;
+    if (role === "teacher") {
+      // Teacher-specific fields
+      const teacherData = { ...baseData };
+      if (country) teacherData.country = country;
+      if (languages && languages.length) teacherData.languages = languages;
+      if (subjects && subjects.length) teacherData.subjects = subjects;
+      if (bio) teacherData.bio = bio;
+      if (hourlyRate) teacherData.hourlyRate = hourlyRate;
+      console.log("Creating teacher with data:", { ...teacherData, password: "[hidden]" });
+      user = await Teacher.create(teacherData);
+    } else {
+      user = await Student.create(baseData);
+    }
+
     sendTokenResponse(user, 201, res);
   } catch (error) {
     next(error);

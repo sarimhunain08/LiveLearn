@@ -10,6 +10,8 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
 import NotFound from "./pages/NotFound";
+import BecomeATutor from "./pages/BecomeATutor";
+import FindTutors from "./pages/FindTutors";
 
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import CreateClass from "./pages/teacher/CreateClass";
@@ -42,6 +44,8 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/become-a-tutor" element={<BecomeATutor />} />
+            <Route path="/find-tutors" element={<FindTutors />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />

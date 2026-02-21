@@ -1,4 +1,6 @@
 const User = require("../models/User");
+const Teacher = require("../models/Teacher");
+const Student = require("../models/Student");
 const Class = require("../models/Class");
 
 // @desc    Get user profile
@@ -22,6 +24,10 @@ exports.updateProfile = async (req, res, next) => {
       name: req.body.name,
       avatar: req.body.avatar,
       bio: req.body.bio,
+      country: req.body.country,
+      languages: req.body.languages,
+      subjects: req.body.subjects,
+      hourlyRate: req.body.hourlyRate,
     };
 
     // Remove undefined fields
@@ -45,18 +51,29 @@ exports.updateProfile = async (req, res, next) => {
 // @access  Public
 exports.getTeachers = async (req, res, next) => {
   try {
-    const { search } = req.query;
-    const query = { role: "teacher", isActive: true };
+    const { search, subject, country, language } = req.query;
+    const query = { isActive: true };
 
     if (search) {
       query.$or = [
         { name: { $regex: search, $options: "i" } },
         { bio: { $regex: search, $options: "i" } },
+        { subjects: { $regex: search, $options: "i" } },
       ];
     }
 
-    const teachers = await User.find(query).select(
-      "name email avatar bio createdAt subscribers"
+    if (subject) {
+      query.subjects = { $regex: subject, $options: "i" };
+    }
+    if (country) {
+      query.country = { $regex: country, $options: "i" };
+    }
+    if (language) {
+      query.languages = { $regex: language, $options: "i" };
+    }
+
+    const teachers = await Teacher.find(query).select(
+      "name email avatar bio country languages subjects hourlyRate createdAt subscribers"
     );
 
     // Get class counts and subscriber counts for each teacher
@@ -84,24 +101,19 @@ exports.getTeachers = async (req, res, next) => {
 // @access  Public
 exports.getTeacherProfile = async (req, res, next) => {
   try {
-    const teacher = await User.findById(req.params.id).select(
-      "name email avatar bio createdAt"
+    const teacher = await Teacher.findById(req.params.id).select(
+      "name email avatar bio country languages subjects hourlyRate createdAt subscribers"
     );
 
-    if (!teacher || teacher.role !== undefined) {
-      // Verify it's actually a teacher
-      const checkUser = await User.findById(req.params.id);
-      if (!checkUser || checkUser.role !== "teacher") {
-        return res.status(404).json({ success: false, message: "Teacher not found" });
-      }
+    if (!teacher) {
+      return res.status(404).json({ success: false, message: "Teacher not found" });
     }
 
     const classes = await Class.find({ teacher: req.params.id })
       .select("title subject date time duration status maxStudents enrolledStudents")
       .sort({ date: 1 });
 
-    const teacherDoc = await User.findById(req.params.id);
-    const subscriberCount = teacherDoc?.subscribers?.length || 0;
+    const subscriberCount = teacher.subscribers?.length || 0;
 
     res.json({
       success: true,
@@ -122,12 +134,12 @@ exports.getTeacherProfile = async (req, res, next) => {
 // @access  Private (Student)
 exports.subscribeToTeacher = async (req, res, next) => {
   try {
-    const teacher = await User.findById(req.params.id);
-    if (!teacher || teacher.role !== "teacher") {
+    const teacher = await Teacher.findById(req.params.id);
+    if (!teacher) {
       return res.status(404).json({ success: false, message: "Teacher not found" });
     }
 
-    const student = await User.findById(req.user.id);
+    const student = await Student.findById(req.user.id);
 
     // Check if already subscribed (check both sides)
     if (student.subscribedTeachers.includes(req.params.id)) {
@@ -155,7 +167,7 @@ exports.subscribeToTeacher = async (req, res, next) => {
 // @access  Private (Student)
 exports.unsubscribeFromTeacher = async (req, res, next) => {
   try {
-    const student = await User.findById(req.user.id);
+    const student = await Student.findById(req.user.id);
 
     if (!student.subscribedTeachers.includes(req.params.id)) {
       return res.status(400).json({ success: false, message: "Not subscribed to this teacher" });
@@ -168,7 +180,7 @@ exports.unsubscribeFromTeacher = async (req, res, next) => {
     await student.save();
 
     // Remove student from teacher's subscribers
-    const teacher = await User.findById(req.params.id);
+    const teacher = await Teacher.findById(req.params.id);
     if (teacher) {
       teacher.subscribers = teacher.subscribers.filter(
         (id) => id.toString() !== req.user.id
@@ -187,7 +199,7 @@ exports.unsubscribeFromTeacher = async (req, res, next) => {
 // @access  Private (Student)
 exports.getSubscribedTeachers = async (req, res, next) => {
   try {
-    const student = await User.findById(req.user.id).populate(
+    const student = await Student.findById(req.user.id).populate(
       "subscribedTeachers",
       "name email avatar bio"
     );

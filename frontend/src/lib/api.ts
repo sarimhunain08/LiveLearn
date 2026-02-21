@@ -58,10 +58,16 @@ class ApiClient {
     return data;
   }
 
-  async signup(name: string, email: string, password: string, role: string) {
+  async signup(name: string, email: string, password: string, role: string, extra?: {
+    country?: string;
+    languages?: string[];
+    subjects?: string[];
+    bio?: string;
+    hourlyRate?: number;
+  }) {
     const data = await this.request<{ success: boolean; token: string; user: any }>("/auth/signup", {
       method: "POST",
-      body: { name, email, password, role },
+      body: { name, email, password, role, ...extra },
     });
     localStorage.setItem("token", data.token);
     return data;
@@ -93,9 +99,12 @@ class ApiClient {
   }
 
   // Teachers - Browse & Subscribe
-  async getTeachers(params?: { search?: string }) {
+  async getTeachers(params?: { search?: string; subject?: string; country?: string; language?: string }) {
     const searchParams = new URLSearchParams();
     if (params?.search) searchParams.append("search", params.search);
+    if (params?.subject) searchParams.append("subject", params.subject);
+    if (params?.country) searchParams.append("country", params.country);
+    if (params?.language) searchParams.append("language", params.language);
     const query = searchParams.toString() ? `?${searchParams.toString()}` : "";
     return this.request<{ success: boolean; data: any[] }>(`/users/teachers${query}`);
   }

@@ -14,7 +14,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<User>;
-  signup: (name: string, email: string, password: string, role: UserRole) => Promise<User>;
+  signup: (name: string, email: string, password: string, role: UserRole, extra?: Record<string, any>) => Promise<User>;
   logout: () => void;
   isAuthenticated: boolean;
   loading: boolean;
@@ -50,8 +50,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return res.user;
   };
 
-  const signup = async (name: string, email: string, password: string, role: UserRole): Promise<User> => {
-    const res = await api.signup(name, email, password, role);
+  const signup = async (name: string, email: string, password: string, role: UserRole, extra?: Record<string, any>): Promise<User> => {
+    const res = await api.signup(name, email, password, role, extra);
     setUser(res.user);
     return res.user;
   };

@@ -1,4 +1,6 @@
 const User = require("../models/User");
+const Teacher = require("../models/Teacher");
+const Student = require("../models/Student");
 const Class = require("../models/Class");
 
 // @desc    Get admin dashboard stats
@@ -6,8 +8,8 @@ const Class = require("../models/Class");
 // @access  Private (Admin)
 exports.getStats = async (req, res, next) => {
   try {
-    const totalTeachers = await User.countDocuments({ role: "teacher" });
-    const totalStudents = await User.countDocuments({ role: "student" });
+    const totalTeachers = await Teacher.countDocuments();
+    const totalStudents = await Student.countDocuments();
     const totalClasses = await Class.countDocuments();
     const liveNow = await Class.countDocuments({ status: "live" });
     const completedClasses = await Class.countDocuments({ status: "completed" });
@@ -33,7 +35,7 @@ exports.getStats = async (req, res, next) => {
 exports.getAllTeachers = async (req, res, next) => {
   try {
     const { search, page = 1, limit = 20 } = req.query;
-    const query = { role: "teacher" };
+    const query = {};
 
     if (search) {
       query.$or = [
@@ -42,8 +44,8 @@ exports.getAllTeachers = async (req, res, next) => {
       ];
     }
 
-    const total = await User.countDocuments(query);
-    const teachers = await User.find(query)
+    const total = await Teacher.countDocuments(query);
+    const teachers = await Teacher.find(query)
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(Number(limit));
@@ -81,7 +83,7 @@ exports.getAllTeachers = async (req, res, next) => {
 exports.getAllStudents = async (req, res, next) => {
   try {
     const { search, page = 1, limit = 20 } = req.query;
-    const query = { role: "student" };
+    const query = {};
 
     if (search) {
       query.$or = [
@@ -90,8 +92,8 @@ exports.getAllStudents = async (req, res, next) => {
       ];
     }
 
-    const total = await User.countDocuments(query);
-    const students = await User.find(query)
+    const total = await Student.countDocuments(query);
+    const students = await Student.find(query)
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(Number(limit));

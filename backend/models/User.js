@@ -52,7 +52,28 @@ const userSchema = new mongoose.Schema(
     bio: {
       type: String,
       default: "",
-      maxlength: 300,
+      maxlength: 500,
+    },
+    country: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    languages: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
+    subjects: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
+    hourlyRate: {
+      type: Number,
+      default: 0,
     },
     googleTokens: {
       access_token: String,
@@ -61,6 +82,7 @@ const userSchema = new mongoose.Schema(
     },
   },
   {
+    discriminatorKey: "role",
     timestamps: true,
   }
 );
