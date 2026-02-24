@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Navbar from "@/components/landing/Navbar";
+import Footer from "@/components/landing/Footer";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -448,6 +449,8 @@ export default function FindTutors() {
           )}
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

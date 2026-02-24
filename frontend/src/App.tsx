@@ -12,6 +12,8 @@ import ForgotPassword from "./pages/ForgotPassword";
 import NotFound from "./pages/NotFound";
 import BecomeATutor from "./pages/BecomeATutor";
 import FindTutors from "./pages/FindTutors";
+import MonthlyFee from "./pages/MonthlyFee";
+import ContactUs from "./pages/ContactUs";
 
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import CreateClass from "./pages/teacher/CreateClass";
@@ -47,6 +49,8 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/become-a-tutor" element={<BecomeATutor />} />
             <Route path="/find-tutors" element={<FindTutors />} />
+            <Route path="/pricing" element={<MonthlyFee />} />
+            <Route path="/contact" element={<ContactUs />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />

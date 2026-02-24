@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import { ArrowRight, GraduationCap } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
 import FeaturesSection from "@/components/landing/FeaturesSection";
@@ -13,6 +16,40 @@ const Index = () => {
       <FeaturesSection />
       <HowItWorks />
       <SocialProof />
+
+      {/* CTA Section */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-primary/70">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.08),transparent_60%)]" />
+        <div className="relative mx-auto max-w-3xl px-4 py-16 sm:py-24 text-center">
+          <GraduationCap className="mx-auto h-12 w-12 text-white/80 mb-5" />
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
+            Ready to start your learning journey?
+          </h2>
+          <p className="text-white/70 text-base sm:text-lg max-w-xl mx-auto mb-8">
+            Join thousands of students and tutors on LiveLearn. Your first week is completely free — no credit card required.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link to="/signup">
+              <Button
+                size="lg"
+                className="bg-white text-primary hover:bg-white/90 gap-2 px-8 h-12 rounded-xl font-semibold text-base shadow-xl"
+              >
+                Get Started Free <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Link to="/find-tutors">
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-white/30 text-white hover:bg-white/10 gap-2 px-8 h-12 rounded-xl text-base"
+              >
+                Browse Tutors
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );

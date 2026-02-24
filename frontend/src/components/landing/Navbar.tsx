@@ -9,20 +9,33 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-lg">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="gradient-primary flex h-9 w-9 items-center justify-center rounded-lg">
-            <GraduationCap className="h-5 w-5 text-primary-foreground" />
-          </div>
-          <span className="text-xl font-bold text-foreground">LiveLearn</span>
-        </Link>
+        {/* Left: Logo + page links */}
+        <div className="flex items-center gap-1">
+          <Link to="/" className="flex items-center gap-2 mr-4">
+            <div className="gradient-primary flex h-9 w-9 items-center justify-center rounded-lg">
+              <GraduationCap className="h-5 w-5 text-primary-foreground" />
+            </div>
+            <span className="text-xl font-bold text-foreground">LiveLearn</span>
+          </Link>
 
+          <div className="hidden items-center gap-1 md:flex">
+            <Link to="/find-tutors">
+              <Button variant="ghost" size="sm">Find Tutors</Button>
+            </Link>
+            <Link to="/become-a-tutor">
+              <Button variant="ghost" size="sm">Become a Tutor</Button>
+            </Link>
+            <Link to="/pricing">
+              <Button variant="ghost" size="sm">Pricing</Button>
+            </Link>
+            <Link to="/contact">
+              <Button variant="ghost" size="sm">Contact Us</Button>
+            </Link>
+          </div>
+        </div>
+
+        {/* Right: auth actions */}
         <div className="hidden items-center gap-3 md:flex">
-          <Link to="/find-tutors">
-            <Button variant="ghost" size="sm">Find Tutors</Button>
-          </Link>
-          <Link to="/become-a-tutor">
-            <Button variant="ghost" size="sm">Become a Tutor</Button>
-          </Link>
           <Link to="/login">
             <Button variant="ghost" size="sm">Sign In</Button>
           </Link>
@@ -46,6 +59,12 @@ export default function Navbar() {
             </Link>
             <Link to="/become-a-tutor" onClick={() => setOpen(false)}>
               <Button variant="ghost" className="w-full justify-start">Become a Tutor</Button>
+            </Link>
+            <Link to="/pricing" onClick={() => setOpen(false)}>
+              <Button variant="ghost" className="w-full justify-start">Pricing</Button>
+            </Link>
+            <Link to="/contact" onClick={() => setOpen(false)}>
+              <Button variant="ghost" className="w-full justify-start">Contact Us</Button>
             </Link>
             <Link to="/login" onClick={() => setOpen(false)}>
               <Button variant="ghost" className="w-full justify-start">Sign In</Button>
