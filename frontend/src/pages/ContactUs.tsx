@@ -86,7 +86,7 @@ export default function ContactUs() {
 
       {/* Hero */}
       <div className="relative overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-primary/70">
-        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.08),transparent_60%)]" />
         <div className="relative mx-auto max-w-5xl px-4 py-16 sm:py-24 text-center">
           <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
             Contact Us

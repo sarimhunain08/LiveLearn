@@ -172,11 +172,11 @@ const AvatarPlaceholder = ({ name }: { name: string }) => {
   const colors = [
     "from-blue-400 to-blue-600",
     "from-emerald-400 to-emerald-600",
-    "from-purple-400 to-purple-600",
+    "from-amber-400 to-amber-600",
     "from-orange-400 to-orange-600",
     "from-pink-400 to-pink-600",
     "from-cyan-400 to-cyan-600",
-    "from-indigo-400 to-indigo-600",
+    "from-rose-400 to-rose-600",
   ];
   const colorIdx = name.split("").reduce((a, c) => a + c.charCodeAt(0), 0) % colors.length;
   const initials = name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);

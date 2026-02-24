@@ -41,7 +41,7 @@ const Index = () => {
               <Button
                 variant="outline"
                 size="lg"
-                className="border-white/30 text-white hover:bg-white/10 gap-2 px-8 h-12 rounded-xl text-base"
+                className="border-2 border-white/50 text-white hover:bg-white hover:text-primary gap-2 px-8 h-12 rounded-xl text-base font-semibold transition-all"
               >
                 Browse Tutors
               </Button>

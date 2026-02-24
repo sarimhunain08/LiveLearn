@@ -6,7 +6,7 @@ const testimonials = [
     role: "Student",
     text: "LiveLearn has completely transformed the way I study. The tutors are incredibly knowledgeable and the live sessions feel just like a real classroom.",
     avatar: "A",
-    color: "bg-violet-500",
+    color: "bg-amber-500",
   },
   {
     name: "James Carter",

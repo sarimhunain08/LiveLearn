@@ -124,24 +124,25 @@ export default function BecomeATutor() {
       <Navbar />
 
       {/* ═══════════ HERO ═══════════ */}
-      <section className="gradient-hero overflow-hidden">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-28">
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-primary/70">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.08),transparent_60%)]" />
+        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-28">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             {/* Text */}
             <div className="animate-fade-in">
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">
-                <Star className="h-3.5 w-3.5 fill-primary" />
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur px-4 py-1.5 text-sm font-medium text-white">
+                <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
                 Join 10,000+ teachers worldwide
               </div>
 
-              <h1 className="mb-6 text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+              <h1 className="mb-6 text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
                 Make a living by{" "}
-                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                <span className="text-white/90 underline decoration-white/30 underline-offset-4">
                   teaching online
                 </span>
               </h1>
 
-              <p className="mb-10 max-w-lg text-lg text-muted-foreground leading-relaxed">
+              <p className="mb-10 max-w-lg text-lg text-white/70 leading-relaxed">
                 Share your knowledge with the largest community of learners.
                 Teach from anywhere, set your own schedule, and earn on your terms.
               </p>
@@ -152,14 +153,14 @@ export default function BecomeATutor() {
                   {steps.map((s, i) => (
                     <div key={s.num} className="flex items-center">
                       <div className="flex flex-col items-start">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-foreground text-sm font-bold text-background">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white text-sm font-bold text-primary">
                           {s.num}
                         </div>
-                        <h3 className="mt-3 text-sm font-semibold text-foreground sm:text-base">{s.title}</h3>
-                        <p className="text-xs text-muted-foreground sm:text-sm max-w-[160px]">{s.desc}</p>
+                        <h3 className="mt-3 text-sm font-semibold text-white sm:text-base">{s.title}</h3>
+                        <p className="text-xs text-white/60 sm:text-sm max-w-[160px]">{s.desc}</p>
                       </div>
                       {i < steps.length - 1 && (
-                        <div className="mx-3 mt-[-28px] h-0.5 w-12 sm:w-20 bg-border" />
+                        <div className="mx-3 mt-[-28px] h-0.5 w-12 sm:w-20 bg-white/20" />
                       )}
                     </div>
                   ))}
@@ -169,7 +170,7 @@ export default function BecomeATutor() {
               <Link to="/signup">
                 <Button
                   size="lg"
-                  className="gradient-primary text-primary-foreground border-0 gap-2 px-8 text-base shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all"
+                  className="bg-white text-primary hover:bg-white/90 gap-2 px-8 text-base shadow-xl font-semibold transition-all"
                 >
                   Create a tutor profile now <ArrowRight className="h-4 w-4" />
                 </Button>
@@ -179,14 +180,14 @@ export default function BecomeATutor() {
             {/* Image placeholder */}
             <div className="hidden lg:flex justify-center">
               <div className="relative">
-                <div className="absolute -inset-4 rounded-2xl bg-primary/5 blur-3xl" />
-                <div className="relative flex h-[400px] w-[360px] items-center justify-center rounded-2xl border border-border bg-card shadow-elevated overflow-hidden">
+                <div className="absolute -inset-4 rounded-2xl bg-white/5 blur-3xl" />
+                <div className="relative flex h-[400px] w-[360px] items-center justify-center rounded-2xl border border-white/20 bg-white/10 backdrop-blur shadow-elevated overflow-hidden">
                   <div className="text-center px-8">
-                    <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full gradient-primary">
-                      <Video className="h-10 w-10 text-primary-foreground" />
+                    <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-white/20 backdrop-blur">
+                      <Video className="h-10 w-10 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-foreground mb-2">Your Classroom</h3>
-                    <p className="text-sm text-muted-foreground">
+                    <h3 className="text-xl font-bold text-white mb-2">Your Classroom</h3>
+                    <p className="text-sm text-white/70">
                       HD video, screen sharing, chat, and more — all in one place.
                     </p>
                   </div>
@@ -336,11 +337,11 @@ export default function BecomeATutor() {
 
           <p className="mt-8 text-sm text-muted-foreground">
             Have more questions?{" "}
-            <Link to="/" className="text-primary hover:underline">
+            <Link to="/contact" className="text-primary hover:underline">
               Check our Help center
             </Link>{" "}
             or{" "}
-            <Link to="/" className="text-primary hover:underline">
+            <Link to="/contact" className="text-primary hover:underline">
               contact our support team
             </Link>
           </p>

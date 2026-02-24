@@ -163,15 +163,16 @@ const Signup = () => {
           </div>
 
           {/* Bottom */}
-          <div className="flex items-center gap-3">
-            <div className="flex -space-x-2">
-              {["bg-blue-400", "bg-green-400", "bg-orange-400", "bg-pink-400"].map((c, i) => (
-                <div key={i} className={`h-8 w-8 rounded-full ${c} border-2 border-primary/50 flex items-center justify-center text-xs font-bold text-white`}>
-                  {String.fromCharCode(65 + i)}
-                </div>
+          <div className="rounded-xl bg-white/10 backdrop-blur p-5">
+            <div className="flex gap-1 mb-2">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
               ))}
             </div>
-            <p className="text-sm text-white/70">
+            <p className="text-sm text-white/80 italic leading-relaxed mb-3">
+              "Signing up was incredibly easy. Within minutes I was connected with an amazing tutor!"
+            </p>
+            <p className="text-xs text-white/60">
               <span className="font-semibold text-white">10,000+</span> students already joined
             </p>
           </div>
@@ -230,7 +231,7 @@ const Signup = () => {
                   >
                     <div className="flex items-center gap-4">
                       <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-2xl ${
-                        r === "teacher" ? "bg-blue-100 dark:bg-blue-500/20" : "bg-green-100 dark:bg-green-500/20"
+                        r === "teacher" ? "bg-orange-100 dark:bg-orange-500/20" : "bg-emerald-100 dark:bg-emerald-500/20"
                       }`}>
                         {r === "teacher" ? "👨‍🏫" : "👨‍🎓"}
                       </div>
