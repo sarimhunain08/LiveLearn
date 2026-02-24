@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
   Home, Plus, BookOpen, Users, DollarSign, Settings as SettingsIcon,
-  BarChart3, GraduationCap, Search, User, Shield, Bell
+  BarChart3, GraduationCap, Search, Clock, User, Shield, Bell, Palette
 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -23,8 +23,8 @@ const teacherNav = [
 const studentNav = [
   { label: "Dashboard", path: "/student/dashboard", icon: <Home className="h-4 w-4" /> },
   { label: "My Classes", path: "/student/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Browse Teachers", path: "/student/browse", icon: <Search className="h-4 w-4" /> },
-  { label: "My Teachers", path: "/student/my-teachers", icon: <GraduationCap className="h-4 w-4" /> },
+  { label: "Browse Classes", path: "/student/browse", icon: <Search className="h-4 w-4" /> },
+  { label: "Schedule", path: "/student/schedule", icon: <Clock className="h-4 w-4" /> },
   { label: "Settings", path: "/student/settings", icon: <SettingsIcon className="h-4 w-4" /> },
 ];
 

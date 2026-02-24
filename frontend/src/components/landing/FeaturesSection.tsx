@@ -7,15 +7,13 @@ const features = [
     description: "Crystal clear video and audio quality for an immersive learning experience.",
     gradient: "from-blue-500 to-cyan-500",
     bg: "bg-blue-500/10",
-    iconColor: "text-blue-500",
   },
   {
     icon: CalendarDays,
     title: "Smart Scheduling",
     description: "Easy-to-use calendar with automated reminders so you never miss a class.",
-    gradient: "from-amber-500 to-orange-500",
-    bg: "bg-amber-500/10",
-    iconColor: "text-amber-500",
+    gradient: "from-violet-500 to-purple-500",
+    bg: "bg-violet-500/10",
   },
   {
     icon: ShieldCheck,
@@ -23,7 +21,6 @@ const features = [
     description: "End-to-end encrypted sessions keeping your learning environment safe.",
     gradient: "from-emerald-500 to-green-500",
     bg: "bg-emerald-500/10",
-    iconColor: "text-emerald-500",
   },
   {
     icon: MessageSquare,
@@ -31,7 +28,6 @@ const features = [
     description: "Real-time chat, raise hand, and engagement tools for active participation.",
     gradient: "from-orange-500 to-amber-500",
     bg: "bg-orange-500/10",
-    iconColor: "text-orange-500",
   },
   {
     icon: Globe,
@@ -39,7 +35,6 @@ const features = [
     description: "Access classes from any device — desktop, tablet or mobile, wherever you are.",
     gradient: "from-pink-500 to-rose-500",
     bg: "bg-pink-500/10",
-    iconColor: "text-pink-500",
   },
   {
     icon: Sparkles,
@@ -47,7 +42,6 @@ const features = [
     description: "Small class sizes and 1-on-1 options for tailored learning experiences.",
     gradient: "from-teal-500 to-cyan-500",
     bg: "bg-teal-500/10",
-    iconColor: "text-teal-500",
   },
 ];
 
@@ -78,7 +72,7 @@ export default function FeaturesSection() {
               <div className={`absolute top-0 inset-x-0 h-1 rounded-t-2xl bg-gradient-to-r ${f.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
 
               <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl ${f.bg}`}>
-                <f.icon className={`h-6 w-6 ${f.iconColor}`} />
+                <f.icon className="h-6 w-6" style={{ color: `var(--tw-gradient-from)` }} />
               </div>
               <h3 className="mb-2 text-base font-semibold text-foreground">{f.title}</h3>
               <p className="text-sm leading-relaxed text-muted-foreground">{f.description}</p>

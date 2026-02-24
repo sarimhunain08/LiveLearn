@@ -11,7 +11,7 @@ const steps = [
     icon: Bell,
     title: "Schedule a Class",
     desc: "Book a session that fits your schedule. Get automatic email & in-app reminders.",
-    color: "from-amber-500 to-orange-500",
+    color: "from-violet-500 to-purple-500",
   },
   {
     icon: MonitorPlay,
