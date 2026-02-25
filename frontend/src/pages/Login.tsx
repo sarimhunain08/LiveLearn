@@ -53,24 +53,24 @@ const Login = () => {
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/20 backdrop-blur">
               <GraduationCap className="h-5 w-5 text-white" />
             </div>
-            <span className="text-xl font-bold text-white">LiveLearn</span>
+            <span className="text-xl font-bold text-white">Ilmify</span>
           </Link>
 
           {/* Center content */}
           <div className="max-w-md">
             <h2 className="text-3xl xl:text-4xl font-extrabold text-white leading-tight mb-4">
-              Welcome back to your learning journey
+              Welcome back to your Quran journey
             </h2>
             <p className="text-white/70 leading-relaxed mb-8">
-              Sign in to access your classes, connect with tutors, and continue growing your skills.
+              Sign in to access your classes, connect with Quran tutors, and continue growing in knowledge.
             </p>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4">
               {[
-                { icon: Users, value: "10K+", label: "Students" },
+                { icon: Users, value: "5K+", label: "Students" },
                 { icon: Star, value: "4.9", label: "Rating" },
-                { icon: BookOpen, value: "50+", label: "Subjects" },
+                { icon: BookOpen, value: "200+", label: "Tutors" },
               ].map((s, i) => (
                 <div key={i} className="rounded-xl bg-white/10 backdrop-blur p-3 text-center">
                   <s.icon className="h-5 w-5 text-white/80 mx-auto mb-1" />
@@ -89,7 +89,7 @@ const Login = () => {
               ))}
             </div>
             <p className="text-sm text-white/80 italic leading-relaxed mb-3">
-              "LiveLearn made it so easy to find a tutor and schedule classes around my busy life. The live sessions are incredible!"
+              "Ilmify made it so easy to find a Quran tutor. The live sessions are truly blessed!"
             </p>
             <div className="flex items-center gap-2">
               <div className="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold text-white">
@@ -113,7 +113,7 @@ const Login = () => {
               <div className="gradient-primary flex h-10 w-10 items-center justify-center rounded-lg">
                 <GraduationCap className="h-5 w-5 text-primary-foreground" />
               </div>
-              <span className="text-2xl font-bold text-foreground">LiveLearn</span>
+              <span className="text-2xl font-bold text-foreground">Ilmify</span>
             </Link>
             <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Welcome back</h1>
             <p className="mt-1 text-muted-foreground">Sign in to your account to continue</p>
@@ -138,9 +138,6 @@ const Login = () => {
             <div>
               <div className="mb-1.5 flex items-center justify-between">
                 <label className="text-sm font-medium text-foreground">Password</label>
-                <Link to="/forgot-password" className="text-xs text-primary hover:underline">
-                  Forgot password?
-                </Link>
               </div>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -171,16 +168,9 @@ const Login = () => {
             </Button>
           </form>
 
-          <div className="mt-5 rounded-xl bg-muted/50 border border-border p-3.5 text-xs text-muted-foreground">
-            <p className="font-semibold text-foreground mb-1">Demo accounts:</p>
-            <p>teacher@demo.com &bull; student@demo.com &bull; admin@demo.com</p>
-            <p>Password: password123</p>
+          <div className="mt-5 text-center text-xs text-muted-foreground">
+            <p>Need help? <Link to="/contact" className="text-primary hover:underline">Contact Support</Link></p>
           </div>
-
-          <p className="mt-6 text-center text-sm text-muted-foreground">
-            Don't have an account?{" "}
-            <Link to="/signup" className="font-semibold text-primary hover:underline">Sign up free</Link>
-          </p>
         </div>
       </div>
     </div>

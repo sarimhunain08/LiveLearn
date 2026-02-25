@@ -1,108 +1,120 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Star, Users, BookOpen, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import heroImage from "@/assets/hero-illustration.png";
+import { useState, useEffect, useCallback } from "react";
+import img1 from "@/assets/1.png";
+import img2 from "@/assets/2.png";
+import img3 from "@/assets/3.png";
+
+const heroImages = [img1, img2, img3];
 
 const stats = [
-  { value: "10K+", label: "Active Students", icon: Users },
-  { value: "500+", label: "Expert Tutors", icon: Award },
-  { value: "50+", label: "Subjects", icon: BookOpen },
+  { value: "5,000+", label: "Students Registered", icon: Users },
+  { value: "200+", label: "Quran Tutors", icon: Award },
+  { value: "50K+", label: "Classes Completed", icon: BookOpen },
   { value: "4.9", label: "Average Rating", icon: Star },
 ];
 
 export default function HeroSection() {
+  const [currentImg, setCurrentImg] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const nextImage = useCallback(() => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentImg((prev) => (prev + 1) % heroImages.length);
+      setIsTransitioning(false);
+    }, 500);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(nextImage, 4000);
+    return () => clearInterval(interval);
+  }, [nextImage]);
+
   return (
     <section className="relative overflow-hidden">
-      {/* Background layers */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5" />
-      <div className="absolute top-20 -left-32 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
-      <div className="absolute bottom-10 -right-32 h-72 w-72 rounded-full bg-accent/10 blur-3xl" />
+      {/* Islamic green gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/80 to-primary/60" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.1),transparent_60%)]" />
+      {/* Subtle geometric pattern overlay */}
+      <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")" }} />
 
       <div className="relative mx-auto max-w-7xl px-4 pt-16 pb-10 sm:px-6 lg:px-8 lg:pt-24 lg:pb-16">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           {/* Left content */}
           <div className="max-w-xl">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur px-4 py-1.5 text-sm font-medium text-white animate-fade-in">
               <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yellow-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-yellow-400" />
               </span>
-              Live classes happening now
+              Live Quran classes happening now
             </div>
 
-            <h1 className="text-4xl font-extrabold leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-[3.5rem]">
-              Learn from the{" "}
+            <h1 className="text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[3.5rem] animate-fade-in-up" style={{ animationDelay: "0.15s", animationFillMode: "both" }}>
+              Learn Quran Online{" "}
               <span className="relative">
-                <span className="bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent">
-                  Best Tutors
+                <span className="text-yellow-300">
+                  With Expert Tutors
                 </span>
-                <svg className="absolute -bottom-1.5 left-0 w-full" viewBox="0 0 200 8" fill="none">
-                  <path d="M2 6c50-5 100-5 196 0" stroke="hsl(var(--primary))" strokeWidth="3" strokeLinecap="round" opacity="0.3" />
-                </svg>
-              </span>{" "}
-              Worldwide
+              </span>
             </h1>
 
-            <p className="mt-5 text-base text-muted-foreground leading-relaxed sm:text-lg">
-              Connect with expert tutors for live, interactive online classes.
-              Learn any subject, anytime, from anywhere — with personalized
-              attention and real-time collaboration.
+            <p className="mt-5 text-base text-white/80 leading-relaxed sm:text-lg animate-fade-in-up" style={{ animationDelay: "0.3s", animationFillMode: "both" }}>
+              Your rate, Your time, Your choice.
+              Online Quran classes for Tajweed, Hifz and Arabic —
+              with personalized attention and real-time collaboration.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/signup">
+            <div className="mt-8 flex flex-wrap gap-3 animate-fade-in-up" style={{ animationDelay: "0.45s", animationFillMode: "both" }}>
+              <Link to="/pricing">
                 <Button
                   size="lg"
-                  className="gradient-primary text-primary-foreground border-0 gap-2 px-8 text-base shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all h-12 rounded-xl"
+                  className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 gap-2 px-8 text-base font-bold shadow-lg hover:shadow-xl transition-all h-12 rounded-xl"
                 >
-                  Start Learning Free <ArrowRight className="h-4 w-4" />
+                  View Pricing <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
-              <Link to="/find-tutors">
+              <Link to="/contact">
                 <Button
                   variant="outline"
                   size="lg"
-                  className="gap-2 px-8 text-base h-12 rounded-xl bg-transparent border-2 border-foreground/20 text-foreground hover:bg-foreground hover:text-background transition-all"
+                  className="gap-2 px-8 text-base h-12 rounded-xl bg-transparent border-2 border-white/30 text-white hover:bg-white/10 transition-all"
                 >
-                  Browse Tutors
+                  Contact Us
                 </Button>
               </Link>
             </div>
           </div>
 
-          {/* Right: image with animated floating badges */}
-          <div className="hidden lg:block">
+          {/* Right: rotating images */}
+          <div className="hidden lg:block animate-fade-in-up" style={{ animationDelay: "0.4s", animationFillMode: "both" }}>
             <div className="relative">
-              {/* Main image */}
-              <div className="absolute -inset-4 rounded-2xl bg-primary/5 blur-3xl" />
-              <img
-                src={heroImage}
-                alt="LiveLearn virtual classroom with teacher and students"
-                className="relative rounded-2xl shadow-xl"
-              />
-
-              {/* Floating badge: rating */}
-              <div className="absolute -top-4 -right-4 rounded-xl border border-border bg-card px-4 py-3 shadow-lg animate-bounce" style={{ animationDuration: "3s" }}>
-                <div className="flex items-center gap-2">
-                  <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                  <div>
-                    <p className="text-sm font-bold text-foreground">4.9/5</p>
-                    <p className="text-[10px] text-muted-foreground">2k+ reviews</p>
-                  </div>
-                </div>
+              {/* Image carousel */}
+              <div className="relative overflow-hidden rounded-2xl shadow-xl" style={{ minHeight: "380px" }}>
+                <img
+                  src={heroImages[currentImg]}
+                  alt="Ilmify online Quran learning"
+                  className="relative w-full h-full object-cover rounded-2xl transition-all duration-700 ease-in-out"
+                  style={{
+                    opacity: isTransitioning ? 0 : 1,
+                    transform: isTransitioning ? "scale(1.05)" : "scale(1)",
+                  }}
+                />
               </div>
 
-              {/* Floating badge: students */}
-              <div className="absolute -bottom-4 -left-4 rounded-xl border border-border bg-card px-4 py-3 shadow-lg animate-bounce" style={{ animationDuration: "4s", animationDelay: "1s" }}>
-                <div className="flex items-center gap-2">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-green-100 text-green-600">
-                    <Users className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-foreground">10,000+</p>
-                    <p className="text-[10px] text-muted-foreground">Happy students</p>
-                  </div>
-                </div>
+              {/* Slide indicators */}
+              <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 flex gap-2">
+                {heroImages.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => { setIsTransitioning(true); setTimeout(() => { setCurrentImg(i); setIsTransitioning(false); }, 500); }}
+                    className={`rounded-full transition-all duration-300 ${
+                      i === currentImg ? "h-2.5 w-8 bg-yellow-400" : "h-2.5 w-2.5 bg-white/40 hover:bg-white/60"
+                    }`}
+                  />
+                ))}
               </div>
             </div>
           </div>
@@ -110,17 +122,18 @@ export default function HeroSection() {
 
         {/* Stats strip */}
         <div className="mt-16 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {stats.map((s) => (
+          {stats.map((s, i) => (
             <div
               key={s.label}
-              className="flex items-center gap-3 rounded-xl border border-border bg-card p-4 shadow-sm"
+              className="flex items-center gap-3 rounded-xl border border-white/15 bg-white/10 backdrop-blur p-4 animate-fade-in-up"
+              style={{ animationDelay: `${0.6 + i * 0.1}s`, animationFillMode: "both" }}
             >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/15 text-yellow-300">
                 <s.icon className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-lg font-extrabold text-foreground leading-none">{s.value}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">{s.label}</p>
+                <p className="text-lg font-extrabold text-white leading-none">{s.value}</p>
+                <p className="text-xs text-white/60 mt-0.5">{s.label}</p>
               </div>
             </div>
           ))}

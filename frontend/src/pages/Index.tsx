@@ -3,6 +3,7 @@ import { ArrowRight, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
+import CoursesSection from "@/components/landing/CoursesSection";
 import FeaturesSection from "@/components/landing/FeaturesSection";
 import HowItWorks from "@/components/landing/HowItWorks";
 import SocialProof from "@/components/landing/SocialProof";
@@ -13,6 +14,7 @@ const Index = () => {
     <div className="h-screen overflow-y-auto bg-background">
       <Navbar />
       <HeroSection />
+      <CoursesSection />
       <FeaturesSection />
       <HowItWorks />
       <SocialProof />
@@ -23,27 +25,26 @@ const Index = () => {
         <div className="relative mx-auto max-w-3xl px-4 py-16 sm:py-24 text-center">
           <GraduationCap className="mx-auto h-12 w-12 text-white/80 mb-5" />
           <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
-            Ready to start your learning journey?
+            Ready to start your Quran journey?
           </h2>
           <p className="text-white/70 text-base sm:text-lg max-w-xl mx-auto mb-8">
-            Join thousands of students and tutors on LiveLearn. Your first week is completely free — no credit card required.
+            Join thousands of students on Ilmify. Start your Quran learning journey today.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
-            <Link to="/signup">
+            <Link to="/pricing">
               <Button
                 size="lg"
                 className="bg-white text-primary hover:bg-white/90 gap-2 px-8 h-12 rounded-xl font-semibold text-base shadow-xl"
               >
-                Get Started Free <ArrowRight className="h-4 w-4" />
+                View Pricing <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
-            <Link to="/find-tutors">
+            <Link to="/contact">
               <Button
-                variant="outline"
                 size="lg"
-                className="border-white/30 text-white hover:bg-white/10 gap-2 px-8 h-12 rounded-xl text-base"
+                className="bg-white/15 backdrop-blur border-2 border-white/40 text-white hover:bg-white hover:text-primary gap-2 px-8 h-12 rounded-xl text-base font-semibold transition-all shadow-lg"
               >
-                Browse Tutors
+                Contact Us
               </Button>
             </Link>
           </div>

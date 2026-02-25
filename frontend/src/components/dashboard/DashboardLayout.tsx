@@ -62,7 +62,7 @@ export default function DashboardLayout({ children, navItems, title }: Dashboard
             <div className="gradient-primary flex h-8 w-8 items-center justify-center rounded-lg">
               <GraduationCap className="h-4 w-4 text-primary-foreground" />
             </div>
-            <span className="text-lg font-bold text-foreground">LiveLearn</span>
+            <span className="text-lg font-bold text-foreground">Ilmify</span>
           </Link>
         )}
         {isMobile ? (

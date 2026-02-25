@@ -63,12 +63,12 @@ const stats = [
 /* ─── FAQ data ─── */
 const faqs = [
   {
-    q: "What qualifications do I need to teach on LiveLearn?",
+    q: "What qualifications do I need to teach on Ilmify?",
     a: "We welcome teachers of all backgrounds — whether you have a formal degree, professional certification, or deep practical experience. We review each application to ensure quality for our students.",
   },
   {
     q: "How much can I earn?",
-    a: "You set your own rate! Teachers on LiveLearn earn anywhere from $10 to $80+ per hour depending on subject, experience, and demand. You keep 100% of what you charge.",
+    a: "You set your own rate! Teachers on Ilmify earn anywhere from $10 to $80+ per hour depending on subject, experience, and demand. You keep 100% of what you charge.",
   },
   {
     q: "What subjects can I teach?",
@@ -76,7 +76,7 @@ const faqs = [
   },
   {
     q: "Is it free to create a teacher profile?",
-    a: "Yes, creating and maintaining your teacher profile on LiveLearn is completely free. We only succeed when you succeed.",
+    a: "Yes, creating and maintaining your teacher profile on Ilmify is completely free. We only succeed when you succeed.",
   },
   {
     q: "What equipment do I need?",
@@ -99,7 +99,7 @@ const faqs = [
 /* ─── Testimonial ─── */
 const testimonial = {
   quote:
-    "LiveLearn allowed me to turn my passion into a full-time career — teaching students from around the world, right from my living room!",
+    "Ilmify allowed me to turn my passion into a full-time career — teaching students from around the world, right from my living room!",
   name: "Sarah J.",
   role: "Math & Science Teacher",
 };
@@ -224,7 +224,7 @@ export default function BecomeATutor() {
                 </span>
               </h2>
               <p className="mb-8 text-muted-foreground text-lg leading-relaxed">
-                LiveLearn connects you with thousands of students globally.
+                Ilmify connects you with thousands of students globally.
                 Join us and you'll have everything you need to teach successfully.
               </p>
 

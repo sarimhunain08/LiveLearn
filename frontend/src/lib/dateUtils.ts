@@ -1,5 +1,5 @@
 /**
- * Timezone-aware date/time utilities for LiveLearn.
+ * Timezone-aware date/time utilities for Ilmify.
  *
  * Classes store `classDateTime` (UTC) — the exact moment the class starts.
  * When displayed, these are automatically converted to the viewer's local timezone

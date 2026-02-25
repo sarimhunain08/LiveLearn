@@ -16,7 +16,7 @@ const ForgotPassword = () => {
             <div className="gradient-primary flex h-10 w-10 items-center justify-center rounded-lg">
               <GraduationCap className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="text-2xl font-bold text-foreground">LiveLearn</span>
+            <span className="text-2xl font-bold text-foreground">Ilmify</span>
           </Link>
           <h1 className="text-2xl font-bold text-foreground">Reset password</h1>
           <p className="mt-1 text-muted-foreground">We'll send you a reset link</p>

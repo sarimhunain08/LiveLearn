@@ -13,10 +13,10 @@ export default function Footer() {
               <div className="gradient-primary flex h-9 w-9 items-center justify-center rounded-lg">
                 <GraduationCap className="h-5 w-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold text-foreground">LiveLearn</span>
+              <span className="text-xl font-bold text-foreground">Ilmify</span>
             </Link>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              Connecting students with expert tutors worldwide through live, interactive online classes.
+              Connecting students with expert Quran tutors worldwide through live, interactive online classes. Learn Tajweed, Hifz, and Arabic from home.
             </p>
             <div className="flex gap-3">
               {[
@@ -43,10 +43,9 @@ export default function Footer() {
             <h4 className="mb-4 text-sm font-semibold text-foreground">Quick Links</h4>
             <ul className="space-y-2.5 text-sm">
               {[
-                { label: "Find Tutors", to: "/find-tutors" },
-                { label: "Become a Tutor", to: "/become-a-tutor" },
+                { label: "Home", to: "/" },
                 { label: "Pricing Plans", to: "/pricing" },
-                { label: "Sign Up Free", to: "/signup" },
+                { label: "Contact Us", to: "/contact" },
               ].map((l) => (
                 <li key={l.to}>
                   <Link to={l.to} className="text-muted-foreground hover:text-primary transition-colors">
@@ -82,7 +81,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-2.5 text-muted-foreground">
                 <Mail className="h-4 w-4 mt-0.5 shrink-0 text-primary" />
-                <span>support@livelearn.com</span>
+                <span>support@ilmify.online</span>
               </li>
               <li className="flex items-start gap-2.5 text-muted-foreground">
                 <Phone className="h-4 w-4 mt-0.5 shrink-0 text-primary" />
@@ -98,7 +97,7 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-border py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-          <span>© {new Date().getFullYear()} LiveLearn Platform. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} Ilmify. All rights reserved.</span>
           <div className="flex items-center gap-4">
             <Link to="/" className="hover:text-foreground transition-colors">Privacy</Link>
             <Link to="/" className="hover:text-foreground transition-colors">Terms</Link>

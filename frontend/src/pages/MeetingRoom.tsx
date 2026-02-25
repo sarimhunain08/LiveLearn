@@ -41,7 +41,7 @@ export default function MeetingRoom() {
   useEffect(() => {
     if (!cls || !user) return;
 
-    const roomName = `LiveLearn_${cls._id}`;
+    const roomName = `Ilmify_${cls._id}`;
     const isTeacher = user.role === "teacher";
 
     const initMeeting = async () => {

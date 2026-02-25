@@ -133,24 +133,24 @@ const Signup = () => {
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/20 backdrop-blur">
               <GraduationCap className="h-5 w-5 text-white" />
             </div>
-            <span className="text-xl font-bold text-white">LiveLearn</span>
+            <span className="text-xl font-bold text-white">Ilmify</span>
           </Link>
 
           {/* Center */}
           <div className="max-w-md">
             <h2 className="text-3xl xl:text-4xl font-extrabold text-white leading-tight mb-4">
-              Start your learning journey today
+              Start your Quran journey today
             </h2>
             <p className="text-white/70 leading-relaxed mb-8">
-              Join thousands of students and expert tutors on the platform built for real-time, interactive learning.
+              Join thousands of students and expert Quran tutors on the platform built for real-time, interactive learning.
             </p>
 
             <div className="space-y-4">
               {[
-                { icon: CheckCircle2, text: "Free first week — no credit card needed" },
-                { icon: Star, text: "Access to 500+ expert tutors worldwide" },
+                { icon: CheckCircle2, text: "Free trial — experience before you commit" },
+                { icon: Star, text: "Access to 200+ qualified Quran tutors" },
                 { icon: Shield, text: "Secure, private video sessions" },
-                { icon: BookOpen, text: "50+ subjects from math to music" },
+                { icon: BookOpen, text: "Tajweed, Hifz, Noorani Qaida & Arabic" },
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-3">
                   <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/15">
@@ -187,11 +187,11 @@ const Signup = () => {
               <div className="gradient-primary flex h-10 w-10 items-center justify-center rounded-lg">
                 <GraduationCap className="h-5 w-5 text-primary-foreground" />
               </div>
-              <span className="text-2xl font-bold text-foreground">LiveLearn</span>
+              <span className="text-2xl font-bold text-foreground">Ilmify</span>
             </Link>
             <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Create your account</h1>
             <p className="mt-1 text-muted-foreground">
-              {step === 1 ? "Choose how you want to use LiveLearn" : step === 2 ? "Fill in your details" : "Complete your teacher profile"}
+              {step === 1 ? "Choose how you want to use Ilmify" : step === 2 ? "Fill in your details" : "Complete your teacher profile"}
             </p>
 
             {/* Step indicator */}

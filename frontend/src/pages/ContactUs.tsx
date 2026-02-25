@@ -29,8 +29,8 @@ const contactCards = [
     icon: <Mail className="h-6 w-6" />,
     title: "Email Us",
     description: "Our team typically replies within 24 hours.",
-    detail: "support@livelearn.com",
-    href: "mailto:support@livelearn.com",
+    detail: "support@ilmify.online",
+    href: "mailto:support@ilmify.online",
   },
   {
     icon: <Phone className="h-6 w-6" />,
@@ -88,13 +88,13 @@ export default function ContactUs() {
       <div className="relative overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-primary/70">
         <div className="absolute inset-0 bg-black/20" />
         <div className="relative mx-auto max-w-5xl px-4 py-16 sm:py-24 text-center">
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight animate-fade-in-up">
             Contact Us
           </h1>
-          <p className="mt-4 text-base sm:text-lg text-white/80 max-w-xl mx-auto">
+          <p className="mt-4 text-base sm:text-lg text-white/80 max-w-xl mx-auto animate-fade-in-up" style={{ animationDelay: "0.15s", animationFillMode: "both" }}>
             Have a question or need help? We'd love to hear from you. Reach out and our team will get back to you as soon as possible.
           </p>
-          <div className="mt-4 flex items-center justify-center gap-2 text-sm text-white/70">
+          <div className="mt-4 flex items-center justify-center gap-2 text-sm text-white/70 animate-fade-in-up" style={{ animationDelay: "0.3s", animationFillMode: "both" }}>
             <Link to="/" className="hover:text-white transition-colors">
               Home
             </Link>
@@ -110,7 +110,8 @@ export default function ContactUs() {
           {contactCards.map((card, i) => (
             <div
               key={i}
-              className="rounded-xl border border-border bg-card p-5 shadow-lg hover:shadow-xl transition-shadow text-center"
+              className="rounded-xl border border-border bg-card p-5 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 text-center animate-fade-in-up"
+              style={{ animationDelay: `${0.1 + i * 0.1}s`, animationFillMode: "both" }}
             >
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary mb-3">
                 {card.icon}
@@ -261,7 +262,7 @@ export default function ContactUs() {
                 {[
                   "Need help choosing a plan or tutor?",
                   "Having trouble with your account?",
-                  "Want to become a tutor on LiveLearn?",
+                  "Want to become a tutor on Ilmify?",
                   "Questions about payments or billing?",
                   "Technical issues during a class?",
                 ].map((item, i) => (
@@ -305,12 +306,12 @@ export default function ContactUs() {
               <p className="text-xs text-muted-foreground mb-4">
                 Start your free trial today — no credit card needed.
               </p>
-              <Link to="/signup">
+              <Link to="/pricing">
                 <Button
                   size="sm"
                   className="gradient-primary text-primary-foreground border-0 rounded-xl font-semibold"
                 >
-                  Get Started Free
+                  View Pricing
                 </Button>
               </Link>
             </div>

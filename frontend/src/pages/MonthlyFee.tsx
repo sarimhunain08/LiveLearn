@@ -178,10 +178,10 @@ export default function MonthlyFee() {
       <div className="relative overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-primary/70">
         <div className="absolute inset-0 bg-black/20" />
         <div className="relative mx-auto max-w-5xl px-4 py-16 sm:py-24 text-center">
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight animate-fade-in-up">
             Monthly Charges
           </h1>
-          <div className="mt-4 flex items-center justify-center gap-2 text-sm text-white/80">
+          <div className="mt-4 flex items-center justify-center gap-2 text-sm text-white/80 animate-fade-in-up" style={{ animationDelay: "0.2s", animationFillMode: "both" }}>
             <Link to="/" className="hover:text-white transition-colors">Home</Link>
             <span>&gt;</span>
             <span>Pricing Plans</span>
@@ -232,7 +232,7 @@ export default function MonthlyFee() {
 
           {/* Pricing grid */}
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-            {plans.map((plan) => {
+            {plans.map((plan, idx) => {
               const price = plan.price[region];
               const currency = plan.currency[region];
               const isCustom = plan.name === "Custom";
@@ -240,11 +240,12 @@ export default function MonthlyFee() {
               return (
                 <div
                   key={plan.name}
-                  className={`relative rounded-2xl border-2 bg-card p-6 flex flex-col transition-all hover:-translate-y-1 hover:shadow-xl ${
+                  className={`relative rounded-2xl border-2 bg-card p-6 flex flex-col transition-all hover:-translate-y-1 hover:shadow-xl animate-fade-in-up ${
                     plan.popular
                       ? "border-primary shadow-lg"
                       : "border-border"
                   }`}
+                  style={{ animationDelay: `${0.1 + idx * 0.1}s`, animationFillMode: "both" }}
                 >
                   {plan.popular && (
                     <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
@@ -284,7 +285,7 @@ export default function MonthlyFee() {
                   </ul>
 
                   {/* CTA */}
-                  <Link to="/signup" className="mt-auto">
+                  <Link to="/contact" className="mt-auto">
                     <Button
                       className={`w-full rounded-xl h-11 font-semibold text-sm ${
                         plan.popular
@@ -350,14 +351,14 @@ export default function MonthlyFee() {
             Sign up today and get your first week of classes absolutely free. No credit card required.
           </p>
           <div className="flex items-center justify-center gap-3">
-            <Link to="/signup">
+            <Link to="/contact">
               <Button className="gradient-primary text-primary-foreground border-0 rounded-xl h-11 px-8 font-semibold">
                 Start Free Trial
               </Button>
             </Link>
-            <Link to="/find-tutors">
+            <Link to="/contact">
               <Button variant="outline" className="rounded-xl h-11 px-8">
-                Browse Tutors
+                Contact Us
               </Button>
             </Link>
           </div>
