@@ -268,6 +268,14 @@ class ApiClient {
   async attendClass(classId: string) {
     return this.request(`/classes/${classId}/attend`, { method: "POST" });
   }
+
+  // Contact
+  async submitContact(data: { name: string; email: string; subject: string; message: string }) {
+    return this.request<{ success: boolean; message: string }>("/contact", {
+      method: "POST",
+      body: data,
+    });
+  }
 }
 
 export const api = new ApiClient(API_BASE_URL);

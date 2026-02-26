@@ -13,12 +13,15 @@ import {
   Instagram,
   Twitter,
   Youtube,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
+import { api } from "@/lib/api";
 
 /* ------------------------------------------------------------------ */
 /*  CONTACT INFO CARDS DATA                                            */
@@ -67,17 +70,29 @@ export default function ContactUs() {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (error) setError(null);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app this would POST to the backend
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+
+    try {
+      await api.submitContact(formData);
+      setSubmitted(true);
+    } catch (err: any) {
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -168,6 +183,7 @@ export default function ContactUs() {
                     onClick={() => {
                       setSubmitted(false);
                       setFormData({ name: "", email: "", subject: "", message: "" });
+                      setError(null);
                     }}
                   >
                     Send another message
@@ -175,6 +191,12 @@ export default function ContactUs() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
+                  {error && (
+                    <div className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                      <AlertCircle className="h-4 w-4 shrink-0" />
+                      <span>{error}</span>
+                    </div>
+                  )}
                   <div className="grid gap-5 sm:grid-cols-2">
                     <div className="space-y-1.5">
                       <Label htmlFor="name">Full Name</Label>
@@ -238,10 +260,20 @@ export default function ContactUs() {
 
                   <Button
                     type="submit"
+                    disabled={loading}
                     className="gradient-primary text-primary-foreground border-0 w-full sm:w-auto px-8 h-11 rounded-xl font-semibold"
                   >
-                    <Send className="h-4 w-4 mr-2" />
-                    Send Message
+                    {loading ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="h-4 w-4 mr-2" />
+                        Send Message
+                      </>
+                    )}
                   </Button>
                 </form>
               )}

@@ -44,6 +44,7 @@ app.use("/api/users", require("./routes/user.routes"));
 app.use("/api/classes", require("./routes/class.routes"));
 app.use("/api/admin", require("./routes/admin.routes"));
 app.use("/api/meet", require("./routes/meet.routes"));
+app.use("/api/contact", require("./routes/contact.routes"));
 
 // Health check
 app.get("/api/health", (req, res) => {
