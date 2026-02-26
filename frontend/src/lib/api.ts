@@ -276,6 +276,35 @@ class ApiClient {
       body: data,
     });
   }
+
+  // Admin - Contact Management
+  async getAdminContacts(params?: { status?: string; page?: number }) {
+    const searchParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== "") searchParams.append(key, String(value));
+      });
+    }
+    const query = searchParams.toString() ? `?${searchParams.toString()}` : "";
+    return this.request<{ success: boolean; data: any[]; pagination: any }>(`/contact${query}`);
+  }
+
+  async getAdminContact(id: string) {
+    return this.request<{ success: boolean; data: any }>(`/contact/${id}`);
+  }
+
+  async updateAdminContact(id: string, data: { status?: string; adminNotes?: string }) {
+    return this.request<{ success: boolean; data: any }>(`/contact/${id}`, {
+      method: "PUT",
+      body: data,
+    });
+  }
+
+  async deleteAdminContact(id: string) {
+    return this.request<{ success: boolean; message: string }>(`/contact/${id}`, {
+      method: "DELETE",
+    });
+  }
 }
 
 export const api = new ApiClient(API_BASE_URL);

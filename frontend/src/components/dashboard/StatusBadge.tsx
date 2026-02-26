@@ -7,6 +7,10 @@ const statusStyles: Record<string, string> = {
   suspended: "bg-warning/10 text-warning",
   pending: "bg-muted text-muted-foreground",
   enrolled: "bg-primary/10 text-primary",
+  new: "bg-primary/10 text-primary",
+  read: "bg-muted text-muted-foreground",
+  replied: "bg-success/10 text-success",
+  closed: "bg-muted text-muted-foreground",
 };
 
 export default function StatusBadge({ status }: { status: string }) {

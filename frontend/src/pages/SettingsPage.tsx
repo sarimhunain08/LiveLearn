@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
   Home, Plus, BookOpen, Users, DollarSign, Settings as SettingsIcon,
-  BarChart3, GraduationCap, Search, Clock, User, Shield, Bell, Palette
+  BarChart3, GraduationCap, Search, Clock, User, Shield, Bell, Palette, Mail
 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -33,6 +33,7 @@ const adminNav = [
   { label: "Teachers", path: "/admin/teachers", icon: <GraduationCap className="h-4 w-4" /> },
   { label: "Students", path: "/admin/students", icon: <Users className="h-4 w-4" /> },
   { label: "Classes", path: "/admin/classes", icon: <BookOpen className="h-4 w-4" /> },
+  { label: "Messages", path: "/admin/contacts", icon: <Mail className="h-4 w-4" /> },
   { label: "Reports", path: "/admin/reports", icon: <BarChart3 className="h-4 w-4" /> },
   { label: "Settings", path: "/admin/settings", icon: <SettingsIcon className="h-4 w-4" /> },
 ];
