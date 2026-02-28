@@ -93,6 +93,12 @@ const classSchema = new mongoose.Schema(
   }
 );
 
+// Indexes for frequently queried fields
+classSchema.index({ teacher: 1 });
+classSchema.index({ status: 1 });
+classSchema.index({ enrolledStudents: 1 });
+classSchema.index({ subject: 1, status: 1 });
+
 // Pre-save: always compute classDateTime from date + time + timezone
 classSchema.pre("save", async function () {
   if ((this.isModified("date") || this.isModified("time") || this.isModified("timezone") || !this.classDateTime) && this.date && this.time) {

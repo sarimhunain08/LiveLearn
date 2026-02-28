@@ -7,10 +7,11 @@ const sendTokenResponse = (user, statusCode, res) => {
   const token = user.getSignedJwtToken();
 
   const options = {
-    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days — matches JWT_EXPIRE
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    path: "/",
   };
 
   const userData = {
@@ -62,7 +63,6 @@ exports.signup = async (req, res, next) => {
       if (subjects && subjects.length) teacherData.subjects = subjects;
       if (bio) teacherData.bio = bio;
       if (hourlyRate) teacherData.hourlyRate = hourlyRate;
-      console.log("Creating teacher with data:", { ...teacherData, password: "[hidden]" });
       user = await Teacher.create(teacherData);
     } else {
       user = await Student.create(baseData);
@@ -93,12 +93,14 @@ exports.login = async (req, res, next) => {
 
     // Check if account is active
     if (!user.isActive) {
+      console.warn(`Auth: deactivated account login attempt — ${email}`);
       return res.status(401).json({ success: false, message: "Account is deactivated" });
     }
 
     // Check password
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
+      console.warn(`Auth: failed login attempt — ${email}`);
       return res.status(401).json({ success: false, message: "Invalid credentials" });
     }
 
@@ -122,6 +124,11 @@ exports.getMe = async (req, res, next) => {
         email: user.email,
         role: user.role,
         avatar: user.avatar,
+        country: user.country,
+        languages: user.languages,
+        subjects: user.subjects,
+        bio: user.bio,
+        hourlyRate: user.hourlyRate,
       },
     });
   } catch (error) {

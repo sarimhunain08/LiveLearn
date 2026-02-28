@@ -78,6 +78,8 @@ exports.getStats = async (req, res, next) => {
 exports.getAllTeachers = async (req, res, next) => {
   try {
     const { search, page = 1, limit = 20 } = req.query;
+    const safePage = Math.max(1, parseInt(page) || 1);
+    const safeLimit = Math.min(100, Math.max(1, parseInt(limit) || 20));
     const query = {};
 
     if (search) {
@@ -91,8 +93,8 @@ exports.getAllTeachers = async (req, res, next) => {
     const total = await Teacher.countDocuments(query);
     const teachers = await Teacher.find(query)
       .sort({ createdAt: -1 })
-      .skip((page - 1) * limit)
-      .limit(Number(limit));
+      .skip((safePage - 1) * safeLimit)
+      .limit(safeLimit);
 
     // Get class count for each teacher
     const teachersWithStats = await Promise.all(
@@ -113,7 +115,7 @@ exports.getAllTeachers = async (req, res, next) => {
       success: true,
       count: teachers.length,
       total,
-      totalPages: Math.ceil(total / limit),
+      totalPages: Math.ceil(total / safeLimit),
       data: teachersWithStats,
     });
   } catch (error) {
@@ -127,6 +129,8 @@ exports.getAllTeachers = async (req, res, next) => {
 exports.getAllStudents = async (req, res, next) => {
   try {
     const { search, page = 1, limit = 20 } = req.query;
+    const safePage = Math.max(1, parseInt(page) || 1);
+    const safeLimit = Math.min(100, Math.max(1, parseInt(limit) || 20));
     const query = {};
 
     if (search) {
@@ -140,8 +144,8 @@ exports.getAllStudents = async (req, res, next) => {
     const total = await Student.countDocuments(query);
     const students = await Student.find(query)
       .sort({ createdAt: -1 })
-      .skip((page - 1) * limit)
-      .limit(Number(limit));
+      .skip((safePage - 1) * safeLimit)
+      .limit(safeLimit);
 
     // Get enrolled class count for each student
     const studentsWithStats = await Promise.all(
@@ -157,7 +161,7 @@ exports.getAllStudents = async (req, res, next) => {
       success: true,
       count: students.length,
       total,
-      totalPages: Math.ceil(total / limit),
+      totalPages: Math.ceil(total / safeLimit),
       data: studentsWithStats,
     });
   } catch (error) {
@@ -171,6 +175,8 @@ exports.getAllStudents = async (req, res, next) => {
 exports.getAllClasses = async (req, res, next) => {
   try {
     const { search, subject, status, page = 1, limit = 20 } = req.query;
+    const safePage = Math.max(1, parseInt(page) || 1);
+    const safeLimit = Math.min(100, Math.max(1, parseInt(limit) || 20));
     const query = {};
 
     if (subject && subject !== "all") query.subject = subject;
@@ -187,14 +193,14 @@ exports.getAllClasses = async (req, res, next) => {
     const classes = await Class.find(query)
       .populate("teacher", "name email")
       .sort({ createdAt: -1 })
-      .skip((page - 1) * limit)
-      .limit(Number(limit));
+      .skip((safePage - 1) * safeLimit)
+      .limit(safeLimit);
 
     res.json({
       success: true,
       count: classes.length,
       total,
-      totalPages: Math.ceil(total / limit),
+      totalPages: Math.ceil(total / safeLimit),
       data: classes,
     });
   } catch (error) {
@@ -240,6 +246,31 @@ exports.deleteUser = async (req, res, next) => {
     // Don't allow deleting admins
     if (user.role === "admin") {
       return res.status(400).json({ success: false, message: "Cannot delete admin users" });
+    }
+
+    // Cascade cleanup: remove orphaned data
+    if (user.role === "teacher") {
+      // Cancel all scheduled/live classes by this teacher
+      await Class.updateMany(
+        { teacher: user._id, status: { $in: ["scheduled", "live"] } },
+        { status: "cancelled" }
+      );
+      // Remove from students' subscribedTeachers
+      await Student.updateMany(
+        { subscribedTeachers: user._id },
+        { $pull: { subscribedTeachers: user._id } }
+      );
+    } else if (user.role === "student") {
+      // Remove from class enrollments
+      await Class.updateMany(
+        { enrolledStudents: user._id },
+        { $pull: { enrolledStudents: user._id, attendedStudents: user._id } }
+      );
+      // Remove from teachers' subscribers
+      await Teacher.updateMany(
+        { subscribers: user._id },
+        { $pull: { subscribers: user._id } }
+      );
     }
 
     await user.deleteOne();

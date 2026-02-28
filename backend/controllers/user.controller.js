@@ -23,15 +23,20 @@ exports.getProfile = async (req, res, next) => {
 // @access  Private
 exports.updateProfile = async (req, res, next) => {
   try {
+    // Common fields any role can update
     const fieldsToUpdate = {
       name: req.body.name,
       avatar: req.body.avatar,
-      bio: req.body.bio,
-      country: req.body.country,
-      languages: req.body.languages,
-      subjects: req.body.subjects,
-      hourlyRate: req.body.hourlyRate,
     };
+
+    // Teacher-only fields — students cannot set these
+    if (req.user.role === "teacher") {
+      if (req.body.bio !== undefined) fieldsToUpdate.bio = req.body.bio;
+      if (req.body.country !== undefined) fieldsToUpdate.country = req.body.country;
+      if (req.body.languages !== undefined) fieldsToUpdate.languages = req.body.languages;
+      if (req.body.subjects !== undefined) fieldsToUpdate.subjects = req.body.subjects;
+      if (req.body.hourlyRate !== undefined) fieldsToUpdate.hourlyRate = req.body.hourlyRate;
+    }
 
     // Remove undefined fields
     Object.keys(fieldsToUpdate).forEach(

@@ -52,6 +52,8 @@ exports.createClass = async (req, res, next) => {
 exports.getClasses = async (req, res, next) => {
   try {
     const { subject, search, status, page = 1, limit = 12 } = req.query;
+    const safePage = Math.max(1, parseInt(page) || 1);
+    const safeLimit = Math.min(100, Math.max(1, parseInt(limit) || 12));
     const query = {};
 
     if (subject && subject !== "all") query.subject = subject;
@@ -68,15 +70,15 @@ exports.getClasses = async (req, res, next) => {
     const classes = await Class.find(query)
       .populate("teacher", "name email avatar")
       .sort({ date: 1 })
-      .skip((page - 1) * limit)
-      .limit(Number(limit));
+      .skip((safePage - 1) * safeLimit)
+      .limit(safeLimit);
 
     res.json({
       success: true,
       count: classes.length,
       total,
-      totalPages: Math.ceil(total / limit),
-      currentPage: Number(page),
+      totalPages: Math.ceil(total / safeLimit),
+      currentPage: safePage,
       data: classes,
     });
   } catch (error) {
@@ -167,7 +169,7 @@ exports.enrollInClass = async (req, res, next) => {
     }
 
     // Check if already enrolled
-    if (cls.enrolledStudents.includes(req.user.id)) {
+    if (cls.enrolledStudents.some((id) => id.toString() === req.user.id)) {
       return res.status(400).json({ success: false, message: "Already enrolled in this class" });
     }
 
@@ -196,7 +198,7 @@ exports.unenrollFromClass = async (req, res, next) => {
       return res.status(404).json({ success: false, message: "Class not found" });
     }
 
-    if (!cls.enrolledStudents.includes(req.user.id)) {
+    if (!cls.enrolledStudents.some((id) => id.toString() === req.user.id)) {
       return res.status(400).json({ success: false, message: "Not enrolled in this class" });
     }
 
@@ -491,6 +493,16 @@ exports.attendClass = async (req, res, next) => {
 
     if (!cls) {
       return res.status(404).json({ success: false, message: "Class not found" });
+    }
+
+    // Guard: class must be live
+    if (cls.status !== "live") {
+      return res.status(400).json({ success: false, message: "Class is not currently live" });
+    }
+
+    // Guard: student must be enrolled
+    if (!cls.enrolledStudents.some((id) => id.toString() === req.user.id)) {
+      return res.status(403).json({ success: false, message: "You are not enrolled in this class" });
     }
 
     // Check if already marked

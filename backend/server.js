@@ -1,7 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
@@ -21,7 +20,10 @@ app.use(helmet());
 // Body size limit (prevents memory exhaustion attacks)
 app.use(express.json({ limit: "10kb" }));
 app.use(cookieParser());
-app.use(morgan("dev"));
+
+// Logging — concise in production, verbose in dev
+const morgan = require("morgan");
+app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 
 // Rate limiters
 const generalLimiter = rateLimit({
@@ -40,16 +42,21 @@ const contactLimiter = rateLimit({
   message: { success: false, message: "Too many messages sent, please try again later." },
 });
 app.use("/api", generalLimiter);
+
+// CORS — explicitly allow production + local origins
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:8080",
+  "http://localhost:8081",
+  "http://localhost:3000",
+  "https://ilmify.online",
+  "https://www.ilmify.online",
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
 app.use(
   cors({
     origin: function (origin, callback) {
-      const allowedOrigins = [
-        "http://localhost:5173",
-        "http://localhost:8080",
-        "http://localhost:8081",
-        "http://localhost:3000",
-        process.env.FRONTEND_URL,
-      ].filter(Boolean);
       // Allow requests with no origin (mobile apps, curl, etc)
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
@@ -71,7 +78,7 @@ app.use("/api/contact", contactLimiter, require("./routes/contact.routes"));
 
 // Health check
 app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", message: "LiveLearn API is running" });
+  res.json({ status: "ok", message: "Ilmify API is running" });
 });
 
 // Error handling middleware
@@ -79,6 +86,19 @@ app.use(require("./middleware/errorHandler"));
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });
+
+// Graceful shutdown
+const gracefulShutdown = (signal) => {
+  console.log(`${signal} received. Shutting down gracefully...`);
+  server.close(() => {
+    console.log("HTTP server closed.");
+    process.exit(0);
+  });
+  // Force close after 10s
+  setTimeout(() => process.exit(1), 10000);
+};
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));
