@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const path = require("path");
+const Class = require("../models/Class");
 
 // Load the JaaS private key
 let privateKey;
@@ -29,6 +30,21 @@ exports.getJitsiToken = async (req, res, next) => {
         success: false,
         message: "roomName is required.",
       });
+    }
+
+    // Validate that the roomName maps to a real class the user has access to
+    const cls = await Class.findById(roomName.replace(/^class-/, ""));
+    if (cls) {
+      const userId = req.user.id;
+      const isTeacher = cls.teacher.toString() === userId;
+      const isEnrolled = cls.enrolledStudents.some((s) => s.toString() === userId);
+      const isAdmin = req.user.role === "admin";
+      if (!isTeacher && !isEnrolled && !isAdmin) {
+        return res.status(403).json({
+          success: false,
+          message: "You are not authorized to join this meeting.",
+        });
+      }
     }
 
     const appId = process.env.JAAS_APP_ID;

@@ -3,6 +3,9 @@ const Teacher = require("../models/Teacher");
 const Student = require("../models/Student");
 const Class = require("../models/Class");
 
+// Escape special regex chars to prevent ReDoS
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 // @desc    Get admin dashboard stats
 // @route   GET /api/admin/stats
 // @access  Private (Admin)
@@ -38,9 +41,10 @@ exports.getAllTeachers = async (req, res, next) => {
     const query = {};
 
     if (search) {
+      const safe = escapeRegex(search);
       query.$or = [
-        { name: { $regex: search, $options: "i" } },
-        { email: { $regex: search, $options: "i" } },
+        { name: { $regex: safe, $options: "i" } },
+        { email: { $regex: safe, $options: "i" } },
       ];
     }
 
@@ -86,9 +90,10 @@ exports.getAllStudents = async (req, res, next) => {
     const query = {};
 
     if (search) {
+      const safe = escapeRegex(search);
       query.$or = [
-        { name: { $regex: search, $options: "i" } },
-        { email: { $regex: search, $options: "i" } },
+        { name: { $regex: safe, $options: "i" } },
+        { email: { $regex: safe, $options: "i" } },
       ];
     }
 
@@ -131,9 +136,10 @@ exports.getAllClasses = async (req, res, next) => {
     if (subject && subject !== "all") query.subject = subject;
     if (status && status !== "all") query.status = status;
     if (search) {
+      const safe = escapeRegex(search);
       query.$or = [
-        { title: { $regex: search, $options: "i" } },
-        { description: { $regex: search, $options: "i" } },
+        { title: { $regex: safe, $options: "i" } },
+        { description: { $regex: safe, $options: "i" } },
       ];
     }
 

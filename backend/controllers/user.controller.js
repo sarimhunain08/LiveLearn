@@ -1,4 +1,7 @@
 const User = require("../models/User");
+
+// Escape special regex chars to prevent ReDoS
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const Teacher = require("../models/Teacher");
 const Student = require("../models/Student");
 const Class = require("../models/Class");
@@ -55,21 +58,22 @@ exports.getTeachers = async (req, res, next) => {
     const query = { isActive: true };
 
     if (search) {
+      const safe = escapeRegex(search);
       query.$or = [
-        { name: { $regex: search, $options: "i" } },
-        { bio: { $regex: search, $options: "i" } },
-        { subjects: { $regex: search, $options: "i" } },
+        { name: { $regex: safe, $options: "i" } },
+        { bio: { $regex: safe, $options: "i" } },
+        { subjects: { $regex: safe, $options: "i" } },
       ];
     }
 
     if (subject) {
-      query.subjects = { $regex: subject, $options: "i" };
+      query.subjects = { $regex: escapeRegex(subject), $options: "i" };
     }
     if (country) {
-      query.country = { $regex: country, $options: "i" };
+      query.country = { $regex: escapeRegex(country), $options: "i" };
     }
     if (language) {
-      query.languages = { $regex: language, $options: "i" };
+      query.languages = { $regex: escapeRegex(language), $options: "i" };
     }
 
     const teachers = await Teacher.find(query).select(

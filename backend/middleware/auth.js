@@ -22,6 +22,10 @@ const protect = async (req, res, next) => {
     if (!req.user) {
       return res.status(401).json({ success: false, message: "User not found" });
     }
+    // Block deactivated / banned users even if their JWT is still valid
+    if (!req.user.isActive) {
+      return res.status(403).json({ success: false, message: "Account is deactivated. Please contact support." });
+    }
     next();
   } catch (error) {
     return res.status(401).json({ success: false, message: "Not authorized, token invalid" });

@@ -1,6 +1,9 @@
 const Class = require("../models/Class");
 const User = require("../models/User");
 
+// Escape special regex chars to prevent ReDoS
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 // Whitelist of fields a teacher can set/update on a class
 const ALLOWED_CLASS_FIELDS = [
   "title",
@@ -54,9 +57,10 @@ exports.getClasses = async (req, res, next) => {
     if (subject && subject !== "all") query.subject = subject;
     if (status) query.status = status;
     if (search) {
+      const safe = escapeRegex(search);
       query.$or = [
-        { title: { $regex: search, $options: "i" } },
-        { description: { $regex: search, $options: "i" } },
+        { title: { $regex: safe, $options: "i" } },
+        { description: { $regex: safe, $options: "i" } },
       ];
     }
 

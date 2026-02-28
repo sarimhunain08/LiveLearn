@@ -3,6 +3,8 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 const connectDB = require("./config/db");
 
 // Load env vars
@@ -13,10 +15,31 @@ connectDB();
 
 const app = express();
 
-// Middleware
-app.use(express.json());
+// Security headers
+app.use(helmet());
+
+// Body size limit (prevents memory exhaustion attacks)
+app.use(express.json({ limit: "10kb" }));
 app.use(cookieParser());
 app.use(morgan("dev"));
+
+// Rate limiters
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100,
+  message: { success: false, message: "Too many requests, please try again later." },
+});
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: { success: false, message: "Too many login attempts, please try again after 15 minutes." },
+});
+const contactLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 5,
+  message: { success: false, message: "Too many messages sent, please try again later." },
+});
+app.use("/api", generalLimiter);
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -31,20 +54,20 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(null, true); // Allow all origins in development
+        callback(new Error("Not allowed by CORS"));
       }
     },
     credentials: true,
   })
 );
 
-// Routes
-app.use("/api/auth", require("./routes/auth.routes"));
+// Routes (with specific rate limits on sensitive endpoints)
+app.use("/api/auth", authLimiter, require("./routes/auth.routes"));
 app.use("/api/users", require("./routes/user.routes"));
 app.use("/api/classes", require("./routes/class.routes"));
 app.use("/api/admin", require("./routes/admin.routes"));
 app.use("/api/meet", require("./routes/meet.routes"));
-app.use("/api/contact", require("./routes/contact.routes"));
+app.use("/api/contact", contactLimiter, require("./routes/contact.routes"));
 
 // Health check
 app.get("/api/health", (req, res) => {

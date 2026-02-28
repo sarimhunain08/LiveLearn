@@ -1,6 +1,15 @@
 const Contact = require("../models/Contact");
 const nodemailer = require("nodemailer");
 
+// Escape HTML to prevent XSS in email notifications
+const escapeHtml = (str) =>
+  String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
 // Subject labels for readable emails
 const subjectLabels = {
   general: "General Inquiry",
@@ -38,10 +47,10 @@ async function notifyAdmin(contact) {
       html: `
         <h2>New Contact Form Submission</h2>
         <table style="border-collapse:collapse;width:100%;max-width:500px;">
-          <tr><td style="padding:8px;font-weight:bold;">Name</td><td style="padding:8px;">${contact.name}</td></tr>
-          <tr><td style="padding:8px;font-weight:bold;">Email</td><td style="padding:8px;"><a href="mailto:${contact.email}">${contact.email}</a></td></tr>
-          <tr><td style="padding:8px;font-weight:bold;">Subject</td><td style="padding:8px;">${subjectLabels[contact.subject] || contact.subject}</td></tr>
-          <tr><td style="padding:8px;font-weight:bold;">Message</td><td style="padding:8px;">${contact.message}</td></tr>
+          <tr><td style="padding:8px;font-weight:bold;">Name</td><td style="padding:8px;">${escapeHtml(contact.name)}</td></tr>
+          <tr><td style="padding:8px;font-weight:bold;">Email</td><td style="padding:8px;"><a href="mailto:${escapeHtml(contact.email)}">${escapeHtml(contact.email)}</a></td></tr>
+          <tr><td style="padding:8px;font-weight:bold;">Subject</td><td style="padding:8px;">${subjectLabels[contact.subject] || escapeHtml(contact.subject)}</td></tr>
+          <tr><td style="padding:8px;font-weight:bold;">Message</td><td style="padding:8px;">${escapeHtml(contact.message)}</td></tr>
           <tr><td style="padding:8px;font-weight:bold;">Date</td><td style="padding:8px;">${new Date(contact.createdAt).toLocaleString()}</td></tr>
         </table>
       `,
