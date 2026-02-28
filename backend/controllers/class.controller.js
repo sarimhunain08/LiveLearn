@@ -1,19 +1,42 @@
 const Class = require("../models/Class");
 const User = require("../models/User");
 
+// Whitelist of fields a teacher can set/update on a class
+const ALLOWED_CLASS_FIELDS = [
+  "title",
+  "description",
+  "subject",
+  "date",
+  "time",
+  "duration",
+  "maxStudents",
+  "timezone",
+];
+
+// Helper: pick only allowed keys from an object
+const pick = (obj, keys) => {
+  const result = {};
+  for (const key of keys) {
+    if (obj[key] !== undefined) result[key] = obj[key];
+  }
+  return result;
+};
+
 // @desc    Create a new class
 // @route   POST /api/classes
 // @access  Private (Teacher)
 exports.createClass = async (req, res, next) => {
   try {
-    req.body.teacher = req.user.id;
+    // Only pick fields a teacher is allowed to set (prevents mass assignment)
+    const allowed = pick(req.body, ALLOWED_CLASS_FIELDS);
+    allowed.teacher = req.user.id;
 
     // Ensure timezone is set — pre-save hook will compute classDateTime automatically
-    if (!req.body.timezone) {
-      req.body.timezone = "Asia/Karachi";
+    if (!allowed.timezone) {
+      allowed.timezone = "Asia/Karachi";
     }
 
-    const newClass = await Class.create(req.body);
+    const newClass = await Class.create(allowed);
     res.status(201).json({ success: true, data: newClass });
   } catch (error) {
     next(error);
@@ -92,7 +115,10 @@ exports.updateClass = async (req, res, next) => {
       return res.status(403).json({ success: false, message: "Not authorized to update this class" });
     }
 
-    cls = await Class.findByIdAndUpdate(req.params.id, req.body, {
+    // Only pick fields a teacher is allowed to update (prevents mass assignment)
+    const allowed = pick(req.body, ALLOWED_CLASS_FIELDS);
+
+    cls = await Class.findByIdAndUpdate(req.params.id, allowed, {
       new: true,
       runValidators: true,
     });
