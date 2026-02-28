@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   BarChart3, Users, GraduationCap, BookOpen, Settings, Search,
-  Loader2, AlertCircle, Trash2, Power, Mail
+  Loader2, AlertCircle, Trash2, Power, Mail, Plus
 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatusBadge from "@/components/dashboard/StatusBadge";
@@ -20,6 +21,7 @@ const navItems = [
 ];
 
 export default function AdminTeachers() {
+  const navigate = useNavigate();
   const [teachers, setTeachers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -73,8 +75,8 @@ export default function AdminTeachers() {
 
   return (
     <DashboardLayout navItems={navItems} title="Manage Teachers">
-      <div className="mb-4">
-        <div className="relative max-w-sm">
+      <div className="mb-4 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+        <div className="relative max-w-sm flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search teachers..."
@@ -83,6 +85,9 @@ export default function AdminTeachers() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
+        <Button onClick={() => navigate("/admin/teachers/create")}>
+          <Plus className="h-4 w-4 mr-2" /> Create Teacher
+        </Button>
       </div>
 
       {loading ? (

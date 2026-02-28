@@ -6,6 +6,46 @@ const Class = require("../models/Class");
 // Escape special regex chars to prevent ReDoS
 const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+// @desc    Create a user (teacher or student) by admin
+// @route   POST /api/admin/users
+// @access  Private (Admin)
+exports.createUser = async (req, res, next) => {
+  try {
+    const { name, email, password, role, country, languages, subjects, bio, hourlyRate } = req.body;
+
+    if (!name || !email || !password || !role) {
+      return res.status(400).json({ success: false, message: "Name, email, password and role are required" });
+    }
+
+    if (!["teacher", "student"].includes(role)) {
+      return res.status(400).json({ success: false, message: "Role must be teacher or student" });
+    }
+
+    // Check duplicate
+    const existing = await User.findOne({ email });
+    if (existing) {
+      return res.status(400).json({ success: false, message: "Email already registered" });
+    }
+
+    let user;
+    if (role === "teacher") {
+      const data = { name, email, password };
+      if (country) data.country = country;
+      if (languages && languages.length) data.languages = languages;
+      if (subjects && subjects.length) data.subjects = subjects;
+      if (bio) data.bio = bio;
+      if (hourlyRate) data.hourlyRate = hourlyRate;
+      user = await Teacher.create(data);
+    } else {
+      user = await Student.create({ name, email, password });
+    }
+
+    res.status(201).json({ success: true, data: user });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // @desc    Get admin dashboard stats
 // @route   GET /api/admin/stats
 // @access  Private (Admin)

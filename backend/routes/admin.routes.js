@@ -7,6 +7,7 @@ const {
   toggleUserActive,
   deleteUser,
   getReports,
+  createUser,
 } = require("../controllers/admin.controller");
 const { protect, authorize } = require("../middleware/auth");
 
@@ -18,6 +19,7 @@ router.get("/teachers", getAllTeachers);
 router.get("/students", getAllStudents);
 router.get("/classes", getAllClasses);
 router.get("/reports", getReports);
+router.post("/users", createUser);
 router.put("/users/:id/toggle-active", toggleUserActive);
 router.delete("/users/:id", deleteUser);
 

@@ -244,6 +244,10 @@ class ApiClient {
     return this.request(`/admin/users/${userId}`, { method: "DELETE" });
   }
 
+  async createUser(data: { name: string; email: string; password: string; role: string; country?: string; languages?: string[]; subjects?: string[]; bio?: string; hourlyRate?: number }) {
+    return this.request<{ success: boolean; data: any }>("/admin/users", { method: "POST", body: data });
+  }
+
   async getAdminReports() {
     return this.request<{ success: boolean; data: any }>("/admin/reports");
   }

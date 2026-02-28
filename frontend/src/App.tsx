@@ -31,6 +31,8 @@ import AdminStudents from "./pages/admin/AdminStudents";
 import AdminClasses from "./pages/admin/AdminClasses";
 import AdminReports from "./pages/admin/AdminReports";
 import AdminContacts from "./pages/admin/AdminContacts";
+import AdminCreateTeacher from "./pages/admin/AdminCreateTeacher";
+import AdminCreateStudent from "./pages/admin/AdminCreateStudent";
 
 import SettingsPage from "./pages/SettingsPage";
 
@@ -70,7 +72,9 @@ const App = () => (
             {/* Admin */}
             <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={["admin"]}><AdminDashboard /></ProtectedRoute>} />
             <Route path="/admin/teachers" element={<ProtectedRoute allowedRoles={["admin"]}><AdminTeachers /></ProtectedRoute>} />
+            <Route path="/admin/teachers/create" element={<ProtectedRoute allowedRoles={["admin"]}><AdminCreateTeacher /></ProtectedRoute>} />
             <Route path="/admin/students" element={<ProtectedRoute allowedRoles={["admin"]}><AdminStudents /></ProtectedRoute>} />
+            <Route path="/admin/students/create" element={<ProtectedRoute allowedRoles={["admin"]}><AdminCreateStudent /></ProtectedRoute>} />
             <Route path="/admin/classes" element={<ProtectedRoute allowedRoles={["admin"]}><AdminClasses /></ProtectedRoute>} />
             <Route path="/admin/reports" element={<ProtectedRoute allowedRoles={["admin"]}><AdminReports /></ProtectedRoute>} />
             <Route path="/admin/contacts" element={<ProtectedRoute allowedRoles={["admin"]}><AdminContacts /></ProtectedRoute>} />
