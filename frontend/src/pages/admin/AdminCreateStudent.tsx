@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  BarChart3, Users, GraduationCap, BookOpen, Settings, Mail,
   Loader2, AlertCircle, CheckCircle2, ArrowLeft, Plus,
 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
@@ -9,16 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { api } from "@/lib/api";
-
-const navItems = [
-  { label: "Dashboard", path: "/admin/dashboard", icon: <BarChart3 className="h-4 w-4" /> },
-  { label: "Teachers", path: "/admin/teachers", icon: <GraduationCap className="h-4 w-4" /> },
-  { label: "Students", path: "/admin/students", icon: <Users className="h-4 w-4" /> },
-  { label: "Classes", path: "/admin/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Messages", path: "/admin/contacts", icon: <Mail className="h-4 w-4" /> },
-  { label: "Reports", path: "/admin/reports", icon: <BarChart3 className="h-4 w-4" /> },
-  { label: "Settings", path: "/admin/settings", icon: <Settings className="h-4 w-4" /> },
-];
+import { adminNav as navItems } from "@/lib/navItems";
+import { getErrorMessage } from "@/lib/types";
 
 export default function AdminCreateStudent() {
   const navigate = useNavigate();
@@ -58,8 +49,8 @@ export default function AdminCreateStudent() {
         role: "student",
       });
       setSuccess(true);
-    } catch (err: any) {
-      setError(err.message || "Failed to create student");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }

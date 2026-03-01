@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Home, Plus, BookOpen, Users, Settings, Loader2, Video, Calendar, TrendingUp, Clock, Square } from "lucide-react";
+import { Loader2, Video, Calendar, TrendingUp, Clock, Square } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatCard from "@/components/dashboard/StatCard";
 import StatusBadge from "@/components/dashboard/StatusBadge";
@@ -9,20 +9,14 @@ import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { formatClassDate, formatClassTime } from "@/lib/dateUtils";
 import { useToast } from "@/hooks/use-toast";
-
-const navItems = [
-  { label: "Dashboard", path: "/teacher/dashboard", icon: <Home className="h-4 w-4" /> },
-  { label: "Create Class", path: "/teacher/create-class", icon: <Plus className="h-4 w-4" /> },
-  { label: "My Classes", path: "/teacher/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Students", path: "/teacher/students", icon: <Users className="h-4 w-4" /> },
-  { label: "Settings", path: "/teacher/settings", icon: <Settings className="h-4 w-4" /> },
-];
+import { teacherNav as navItems } from "@/lib/navItems";
+import { getErrorMessage, ClassData } from "@/lib/types";
 
 export default function TeacherDashboard() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [stats, setStats] = useState({ totalStudents: 0, totalClasses: 0, completedClasses: 0, upcomingClasses: 0, teachingMinutes: 0 });
-  const [classes, setClasses] = useState<any[]>([]);
+  const [classes, setClasses] = useState<ClassData[]>([]);
   const [loading, setLoading] = useState(true);
   const [endingClassId, setEndingClassId] = useState<string | null>(null);
 
@@ -62,8 +56,8 @@ export default function TeacherDashboard() {
       ]);
       setStats(statsRes.data);
       setClasses(classesRes.data);
-    } catch (err: any) {
-      toast({ title: "Failed to end class", description: err.message, variant: "destructive" });
+    } catch (err: unknown) {
+      toast({ title: "Failed to end class", description: getErrorMessage(err), variant: "destructive" });
     } finally {
       setEndingClassId(null);
     }

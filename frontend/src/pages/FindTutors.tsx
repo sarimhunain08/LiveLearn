@@ -241,7 +241,7 @@ export default function FindTutors() {
   const hasActiveFilters = subject || country || language;
 
   return (
-    <div className="h-screen overflow-y-auto scrollbar-none bg-background">
+    <div className="min-h-screen bg-background">
       <Navbar />
 
       {/* Top Filter Bar */}

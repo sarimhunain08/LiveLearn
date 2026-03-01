@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { getErrorMessage } from "@/lib/types";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -31,10 +32,10 @@ const Login = () => {
       } else {
         navigate("/student/dashboard");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Login Failed",
-        description: error.message || "Invalid credentials",
+        description: getErrorMessage(error),
         variant: "destructive",
       });
     } finally {
@@ -43,7 +44,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-y-auto">
+    <div className="flex min-h-screen">
       {/* Left branding panel */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-primary/70">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.08),transparent_60%)]" />

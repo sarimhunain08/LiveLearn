@@ -120,7 +120,7 @@ export default function BecomeATutor() {
   };
 
   return (
-    <div id="become-tutor-scroll" className="h-screen overflow-y-auto bg-background">
+    <div id="become-tutor-scroll" className="min-h-screen bg-background">
       <Navbar />
 
       {/* ═══════════ HERO ═══════════ */}

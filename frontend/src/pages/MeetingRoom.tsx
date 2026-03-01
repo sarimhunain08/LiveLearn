@@ -4,6 +4,7 @@ import { Loader2, ArrowLeft, Maximize2, Minimize2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
+import { ClassData } from "@/lib/types";
 
 declare global {
   interface Window {
@@ -15,7 +16,7 @@ export default function MeetingRoom() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [cls, setCls] = useState<any>(null);
+  const [cls, setCls] = useState<ClassData | null>(null);
   const [loading, setLoading] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -62,10 +63,12 @@ export default function MeetingRoom() {
         });
       }
 
+      const appId = import.meta.env.VITE_JAAS_APP_ID;
+
       return new Promise((resolve) => {
         scriptEl = document.createElement("script");
         scriptEl.src =
-          "https://8x8.vc/vpaas-magic-cookie-5ef6ff40e35f44cd9828013d33d85820/external_api.js";
+          `https://8x8.vc/${appId}/external_api.js`;
         scriptEl.async = true;
         scriptEl.onload = () => resolve();
         document.head.appendChild(scriptEl);
@@ -94,7 +97,7 @@ export default function MeetingRoom() {
         if (cancelled || !jitsiRef.current || !window.JitsiMeetExternalAPI) return;
 
         apiRef.current = new window.JitsiMeetExternalAPI("8x8.vc", {
-          roomName: `vpaas-magic-cookie-5ef6ff40e35f44cd9828013d33d85820/${roomName}`,
+          roomName: `${import.meta.env.VITE_JAAS_APP_ID}/${roomName}`,
           parentNode: jitsiRef.current,
           jwt: token,
           width: "100%",

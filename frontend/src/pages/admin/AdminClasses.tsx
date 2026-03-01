@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import {
-  BarChart3, Users, GraduationCap, BookOpen, Settings, Search,
-  Loader2, AlertCircle, Mail
+  Search,
+  Loader2, AlertCircle
 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatusBadge from "@/components/dashboard/StatusBadge";
@@ -9,19 +9,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { api } from "@/lib/api";
-
-const navItems = [
-  { label: "Dashboard", path: "/admin/dashboard", icon: <BarChart3 className="h-4 w-4" /> },
-  { label: "Teachers", path: "/admin/teachers", icon: <GraduationCap className="h-4 w-4" /> },
-  { label: "Students", path: "/admin/students", icon: <Users className="h-4 w-4" /> },
-  { label: "Classes", path: "/admin/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Messages", path: "/admin/contacts", icon: <Mail className="h-4 w-4" /> },
-  { label: "Reports", path: "/admin/reports", icon: <BarChart3 className="h-4 w-4" /> },
-  { label: "Settings", path: "/admin/settings", icon: <Settings className="h-4 w-4" /> },
-];
+import { adminNav as navItems } from "@/lib/navItems";
+import { getErrorMessage, ClassData } from "@/lib/types";
 
 export default function AdminClasses() {
-  const [classes, setClasses] = useState<any[]>([]);
+  const [classes, setClasses] = useState<ClassData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -36,8 +28,8 @@ export default function AdminClasses() {
       });
       setClasses(res.data);
       setError(null);
-    } catch (err: any) {
-      setError(err.message || "Failed to load classes");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }

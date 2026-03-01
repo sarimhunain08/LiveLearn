@@ -1,4 +1,4 @@
-import { GraduationCap, Mail, MapPin, Phone, Facebook, Instagram, Twitter, Youtube } from "lucide-react";
+import { GraduationCap, Mail, MapPin, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Footer() {
@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="border-t border-border bg-card">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Main grid */}
-        <div className="grid gap-10 py-12 sm:py-14 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-10 py-12 sm:py-14 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {/* Brand */}
           <div className="space-y-4">
             <Link to="/" className="flex items-center gap-2">
@@ -18,24 +18,6 @@ export default function Footer() {
             <p className="text-sm leading-relaxed text-muted-foreground">
               Connecting students with expert Quran tutors worldwide through live, interactive online classes. Learn Tajweed, Hifz, and Arabic from home.
             </p>
-            <div className="flex gap-3">
-              {[
-                { icon: <Facebook className="h-4 w-4" />, href: "#" },
-                { icon: <Instagram className="h-4 w-4" />, href: "#" },
-                { icon: <Twitter className="h-4 w-4" />, href: "#" },
-                { icon: <Youtube className="h-4 w-4" />, href: "#" },
-              ].map((s, i) => (
-                <a
-                  key={i}
-                  href={s.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary hover:bg-primary/5"
-                >
-                  {s.icon}
-                </a>
-              ))}
-            </div>
           </div>
 
           {/* Quick Links */}
@@ -48,25 +30,6 @@ export default function Footer() {
                 { label: "Contact Us", to: "/contact" },
               ].map((l) => (
                 <li key={l.to}>
-                  <Link to={l.to} className="text-muted-foreground hover:text-primary transition-colors">
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Support */}
-          <div>
-            <h4 className="mb-4 text-sm font-semibold text-foreground">Support</h4>
-            <ul className="space-y-2.5 text-sm">
-              {[
-                { label: "Help Center", to: "/contact" },
-                { label: "Privacy Policy", to: "/" },
-                { label: "Terms of Service", to: "/" },
-                { label: "FAQ", to: "/pricing" },
-              ].map((l, i) => (
-                <li key={i}>
                   <Link to={l.to} className="text-muted-foreground hover:text-primary transition-colors">
                     {l.label}
                   </Link>
@@ -96,13 +59,8 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-border py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
+        <div className="border-t border-border py-6 flex items-center justify-center text-xs text-muted-foreground">
           <span>© {new Date().getFullYear()} Ilmify. All rights reserved.</span>
-          <div className="flex items-center gap-4">
-            <Link to="/" className="hover:text-foreground transition-colors">Privacy</Link>
-            <Link to="/" className="hover:text-foreground transition-colors">Terms</Link>
-            <Link to="/" className="hover:text-foreground transition-colors">Cookies</Link>
-          </div>
         </div>
       </div>
     </footer>

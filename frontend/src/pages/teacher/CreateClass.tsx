@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, Plus, BookOpen, Users, Settings, CheckCircle, Loader2 } from "lucide-react";
+import { CheckCircle, Loader2 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,14 +8,8 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { api } from "@/lib/api";
-
-const navItems = [
-  { label: "Dashboard", path: "/teacher/dashboard", icon: <Home className="h-4 w-4" /> },
-  { label: "Create Class", path: "/teacher/create-class", icon: <Plus className="h-4 w-4" /> },
-  { label: "My Classes", path: "/teacher/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Students", path: "/teacher/students", icon: <Users className="h-4 w-4" /> },
-  { label: "Settings", path: "/teacher/settings", icon: <Settings className="h-4 w-4" /> },
-];
+import { teacherNav as navItems } from "@/lib/navItems";
+import { getErrorMessage } from "@/lib/types";
 
 const subjects = ["Math", "Science", "English", "History", "Art", "Music", "Programming", "Arabic"];
 
@@ -73,8 +67,6 @@ export default function CreateClass() {
         title,
         subject,
         description,
-        date: new Date(date).toISOString(),
-        time,
         duration,
         maxStudents,
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -85,10 +77,10 @@ export default function CreateClass() {
       await api.createClass(classData);
       setShowSuccess(true);
       toast({ title: "Class created successfully!" });
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Failed to create class",
-        description: error.message || "Something went wrong",
+        description: getErrorMessage(error),
         variant: "destructive",
       });
     } finally {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Home, BookOpen, Search, Settings, Loader2, ArrowLeft, Users, UserPlus, UserCheck, GraduationCap } from "lucide-react";
+import { Loader2, ArrowLeft, Users, UserPlus, UserCheck, BookOpen } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatusBadge from "@/components/dashboard/StatusBadge";
 import { Button } from "@/components/ui/button";
@@ -8,14 +8,8 @@ import { api } from "@/lib/api";
 import { formatClassDate, formatClassTime, formatClassDateTime } from "@/lib/dateUtils";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
-
-const navItems = [
-  { label: "Dashboard", path: "/student/dashboard", icon: <Home className="h-4 w-4" /> },
-  { label: "My Classes", path: "/student/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Browse Teachers", path: "/student/browse", icon: <Search className="h-4 w-4" /> },
-  { label: "My Teachers", path: "/student/my-teachers", icon: <GraduationCap className="h-4 w-4" /> },
-  { label: "Settings", path: "/student/settings", icon: <Settings className="h-4 w-4" /> },
-];
+import { studentNav as navItems } from "@/lib/navItems";
+import { getErrorMessage, User, ClassData } from "@/lib/types";
 
 function capitalizeFirst(s: string) {
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
@@ -25,7 +19,7 @@ export default function TeacherProfile() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [teacher, setTeacher] = useState<any>(null);
+  const [teacher, setTeacher] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
@@ -38,7 +32,7 @@ export default function TeacherProfile() {
           api.getSubscribedTeachers(),
         ]);
         setTeacher(profileRes.data);
-        setIsSubscribed(subscribedRes.data.some((t: any) => t._id === id));
+        setIsSubscribed(subscribedRes.data.some((t: User) => t._id === id));
       } catch (err) {
         console.error("Failed to fetch teacher:", err);
       } finally {
@@ -54,8 +48,8 @@ export default function TeacherProfile() {
       await api.subscribeToTeacher(id!);
       setIsSubscribed(true);
       toast({ title: "Subscribed successfully!" });
-    } catch (err: any) {
-      toast({ title: "Failed", description: err?.message, variant: "destructive" });
+    } catch (err: unknown) {
+      toast({ title: "Failed", description: getErrorMessage(err), variant: "destructive" });
     } finally {
       setActionLoading(false);
     }
@@ -67,8 +61,8 @@ export default function TeacherProfile() {
       await api.unsubscribeFromTeacher(id!);
       setIsSubscribed(false);
       toast({ title: "Unsubscribed" });
-    } catch (err: any) {
-      toast({ title: "Failed", description: err?.message, variant: "destructive" });
+    } catch (err: unknown) {
+      toast({ title: "Failed", description: getErrorMessage(err), variant: "destructive" });
     } finally {
       setActionLoading(false);
     }
@@ -96,10 +90,10 @@ export default function TeacherProfile() {
   }
 
   const upcomingClasses = (teacher.classes || []).filter(
-    (c: any) => c.status === "scheduled" || c.status === "live"
+    (c: ClassData) => c.status === "scheduled" || c.status === "live"
   );
   const completedClasses = (teacher.classes || []).filter(
-    (c: any) => c.status === "completed"
+    (c: ClassData) => c.status === "completed"
   );
 
   return (
@@ -175,7 +169,7 @@ export default function TeacherProfile() {
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {upcomingClasses.map((c: any) => (
+            {upcomingClasses.map((c: ClassData) => (
               <Link
                 key={c._id}
                 to={`/student/class/${c._id}`}
@@ -207,7 +201,7 @@ export default function TeacherProfile() {
           <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
             {/* Mobile card view */}
             <div className="sm:hidden divide-y divide-border">
-              {completedClasses.map((c: any) => (
+              {completedClasses.map((c: ClassData) => (
                 <div key={c._id} className="p-4 space-y-1">
                   <p className="font-medium text-foreground text-sm">{c.title}</p>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -222,7 +216,7 @@ export default function TeacherProfile() {
               <table className="dashboard-table">
                 <thead><tr><th>Class</th><th>Subject</th><th>Date</th></tr></thead>
                 <tbody>
-                  {completedClasses.map((c: any) => (
+                  {completedClasses.map((c: ClassData) => (
                     <tr key={c._id}>
                       <td className="font-medium text-foreground">{c.title}</td>
                       <td><span className="rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">{capitalizeFirst(c.subject)}</span></td>

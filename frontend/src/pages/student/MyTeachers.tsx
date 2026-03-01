@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
-  Home,
   BookOpen,
   Search,
-  Settings,
   Loader2,
   Users,
   Calendar,
@@ -20,21 +18,24 @@ import StatusBadge from "@/components/dashboard/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 import { formatClassDate, formatClassTime } from "@/lib/dateUtils";
+import { studentNav as navItems } from "@/lib/navItems";
+import { User, ClassData } from "@/lib/types";
 
-const navItems = [
-  { label: "Dashboard", path: "/student/dashboard", icon: <Home className="h-4 w-4" /> },
-  { label: "My Classes", path: "/student/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Browse Teachers", path: "/student/browse", icon: <Search className="h-4 w-4" /> },
-  { label: "My Teachers", path: "/student/my-teachers", icon: <GraduationCap className="h-4 w-4" /> },
-  { label: "Settings", path: "/student/settings", icon: <Settings className="h-4 w-4" /> },
-];
+interface TeacherWithClasses extends User {
+  classes?: {
+    upcoming?: ClassData[];
+    completed?: ClassData[];
+    previous?: ClassData[];
+  };
+  subscriberCount?: number;
+}
 
 function capitalizeFirst(s: string) {
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
 }
 
 export default function MyTeachers() {
-  const [teachers, setTeachers] = useState<any[]>([]);
+  const [teachers, setTeachers] = useState<TeacherWithClasses[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -105,7 +106,7 @@ export default function MyTeachers() {
 }
 
 /* ---------- Teacher Card with expandable classes ---------- */
-function TeacherCard({ teacher }: { teacher: any }) {
+function TeacherCard({ teacher }: { teacher: TeacherWithClasses }) {
   const [expanded, setExpanded] = useState(false);
   const { upcoming = [], completed = [], previous = [] } = teacher.classes || {};
   const totalClasses = upcoming.length + completed.length + previous.length;
@@ -231,7 +232,7 @@ function ClassSection({
   badgeVariant,
 }: {
   title: string;
-  classes: any[];
+  classes: ClassData[];
   emptyText: string;
   badgeVariant: "upcoming" | "completed" | "cancelled";
 }) {
@@ -252,7 +253,7 @@ function ClassSection({
         <p className="text-xs text-muted-foreground">{emptyText}</p>
       ) : (
         <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {classes.map((c: any) => (
+          {classes.map((c: ClassData) => (
             <Link
               key={c._id}
               to={`/student/class/${c._id}`}

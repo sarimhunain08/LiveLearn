@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Home, Plus, BookOpen, Users, Settings, Loader2, Video } from "lucide-react";
+import { Loader2, Video } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatusBadge from "@/components/dashboard/StatusBadge";
 import { Button } from "@/components/ui/button";
@@ -7,18 +7,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api } from "@/lib/api";
 import { formatClassDate, formatClassTime } from "@/lib/dateUtils";
 import { Link } from "react-router-dom";
-
-const navItems = [
-  { label: "Dashboard", path: "/teacher/dashboard", icon: <Home className="h-4 w-4" /> },
-  { label: "Create Class", path: "/teacher/create-class", icon: <Plus className="h-4 w-4" /> },
-  { label: "My Classes", path: "/teacher/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Students", path: "/teacher/students", icon: <Users className="h-4 w-4" /> },
-  { label: "Settings", path: "/teacher/settings", icon: <Settings className="h-4 w-4" /> },
-];
+import { teacherNav as navItems } from "@/lib/navItems";
+import { ClassData } from "@/lib/types";
 
 const capitalizeFirst = (s: string) => s ? s.charAt(0).toUpperCase() + s.slice(1) : "";
 
-function ClassTable({ classes }: { classes: any[] }) {
+function ClassTable({ classes }: { classes: ClassData[] }) {
   if (classes.length === 0) {
     return (
       <div className="py-16 text-center">
@@ -98,7 +92,7 @@ function ClassTable({ classes }: { classes: any[] }) {
 }
 
 export default function TeacherClasses() {
-  const [allClasses, setAllClasses] = useState<any[]>([]);
+  const [allClasses, setAllClasses] = useState<ClassData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

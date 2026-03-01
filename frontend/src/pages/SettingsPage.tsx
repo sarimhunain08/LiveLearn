@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import {
-  Home, Plus, BookOpen, Users, Loader2,
-  BarChart3, GraduationCap, Search, Settings as SettingsIcon, User, Mail
-} from "lucide-react";
+import { Loader2, User } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,32 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { api } from "@/lib/api";
-
-const teacherNav = [
-  { label: "Dashboard", path: "/teacher/dashboard", icon: <Home className="h-4 w-4" /> },
-  { label: "Create Class", path: "/teacher/create-class", icon: <Plus className="h-4 w-4" /> },
-  { label: "My Classes", path: "/teacher/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Students", path: "/teacher/students", icon: <Users className="h-4 w-4" /> },
-  { label: "Settings", path: "/teacher/settings", icon: <SettingsIcon className="h-4 w-4" /> },
-];
-
-const studentNav = [
-  { label: "Dashboard", path: "/student/dashboard", icon: <Home className="h-4 w-4" /> },
-  { label: "My Classes", path: "/student/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Browse Classes", path: "/student/browse", icon: <Search className="h-4 w-4" /> },
-  { label: "My Teachers", path: "/student/my-teachers", icon: <GraduationCap className="h-4 w-4" /> },
-  { label: "Settings", path: "/student/settings", icon: <SettingsIcon className="h-4 w-4" /> },
-];
-
-const adminNav = [
-  { label: "Dashboard", path: "/admin/dashboard", icon: <BarChart3 className="h-4 w-4" /> },
-  { label: "Teachers", path: "/admin/teachers", icon: <GraduationCap className="h-4 w-4" /> },
-  { label: "Students", path: "/admin/students", icon: <Users className="h-4 w-4" /> },
-  { label: "Classes", path: "/admin/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Messages", path: "/admin/contacts", icon: <Mail className="h-4 w-4" /> },
-  { label: "Reports", path: "/admin/reports", icon: <BarChart3 className="h-4 w-4" /> },
-  { label: "Settings", path: "/admin/settings", icon: <SettingsIcon className="h-4 w-4" /> },
-];
+import { teacherNav, studentNav, adminNav } from "@/lib/navItems";
+import { getErrorMessage } from "@/lib/types";
 
 export default function SettingsPage() {
   const { user, refreshUser } = useAuth();
@@ -66,8 +39,8 @@ export default function SettingsPage() {
       await api.updateProfile(payload);
       await refreshUser();
       toast({ title: "Profile updated!" });
-    } catch (err: any) {
-      toast({ title: "Update failed", description: err?.message || "Something went wrong", variant: "destructive" });
+    } catch (err: unknown) {
+      toast({ title: "Update failed", description: getErrorMessage(err), variant: "destructive" });
     } finally {
       setSaving(false);
     }

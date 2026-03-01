@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import {
-  BarChart3, Users, GraduationCap, BookOpen, Settings, Mail,
   Loader2, AlertCircle, Trash2, Eye, X, MessageSquare, Clock
 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
@@ -8,16 +7,8 @@ import StatusBadge from "@/components/dashboard/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { api } from "@/lib/api";
-
-const navItems = [
-  { label: "Dashboard", path: "/admin/dashboard", icon: <BarChart3 className="h-4 w-4" /> },
-  { label: "Teachers", path: "/admin/teachers", icon: <GraduationCap className="h-4 w-4" /> },
-  { label: "Students", path: "/admin/students", icon: <Users className="h-4 w-4" /> },
-  { label: "Classes", path: "/admin/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Messages", path: "/admin/contacts", icon: <Mail className="h-4 w-4" /> },
-  { label: "Reports", path: "/admin/reports", icon: <BarChart3 className="h-4 w-4" /> },
-  { label: "Settings", path: "/admin/settings", icon: <Settings className="h-4 w-4" /> },
-];
+import { adminNav as navItems } from "@/lib/navItems";
+import { getErrorMessage, Contact } from "@/lib/types";
 
 const subjectLabels: Record<string, string> = {
   general: "General Inquiry",
@@ -30,11 +21,11 @@ const subjectLabels: Record<string, string> = {
 };
 
 export default function AdminContacts() {
-  const [contacts, setContacts] = useState<any[]>([]);
+  const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState("all");
-  const [selectedContact, setSelectedContact] = useState<any>(null);
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   const fetchContacts = useCallback(async () => {
@@ -45,8 +36,8 @@ export default function AdminContacts() {
       });
       setContacts(res.data);
       setError(null);
-    } catch (err: any) {
-      setError(err.message || "Failed to load contacts");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -56,7 +47,7 @@ export default function AdminContacts() {
     fetchContacts();
   }, [fetchContacts]);
 
-  const handleView = async (contact: any) => {
+  const handleView = async (contact: Contact) => {
     setSelectedContact(contact);
     // Mark as read if new
     if (contact.status === "new") {
@@ -77,10 +68,10 @@ export default function AdminContacts() {
         prev.map((c) => (c._id === id ? { ...c, status } : c))
       );
       if (selectedContact?._id === id) {
-        setSelectedContact((prev: any) => ({ ...prev, status }));
+        setSelectedContact((prev: Contact | null) => prev ? { ...prev, status } : prev);
       }
-    } catch (err: any) {
-      alert(err.message || "Failed to update status");
+    } catch (err: unknown) {
+      alert(getErrorMessage(err));
     } finally {
       setActionLoading(null);
     }
@@ -93,8 +84,8 @@ export default function AdminContacts() {
       await api.deleteAdminContact(id);
       setContacts((prev) => prev.filter((c) => c._id !== id));
       if (selectedContact?._id === id) setSelectedContact(null);
-    } catch (err: any) {
-      alert(err.message || "Failed to delete");
+    } catch (err: unknown) {
+      alert(getErrorMessage(err));
     } finally {
       setActionLoading(null);
     }

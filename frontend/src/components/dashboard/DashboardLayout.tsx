@@ -169,9 +169,11 @@ export default function DashboardLayout({ children, navItems, title }: Dashboard
           </div>
 
           <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-            <button className="relative rounded-md p-1.5 sm:p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+            <button
+              aria-label="Notifications"
+              className="relative rounded-md p-1.5 sm:p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+            >
               <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
-              <span className="absolute right-1 top-1 sm:right-1.5 sm:top-1.5 h-2 w-2 rounded-full bg-destructive" />
             </button>
 
             <DropdownMenu>

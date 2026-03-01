@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Home, BookOpen, Search, Clock, Settings, Loader2, Users, Calendar, TrendingUp, GraduationCap } from "lucide-react";
+import { BookOpen, Loader2, Calendar, TrendingUp, Search, Clock, GraduationCap } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatCard from "@/components/dashboard/StatCard";
 import StatusBadge from "@/components/dashboard/StatusBadge";
@@ -8,19 +8,13 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { api } from "@/lib/api";
 import { formatClassDate, formatClassTime } from "@/lib/dateUtils";
-
-const navItems = [
-  { label: "Dashboard", path: "/student/dashboard", icon: <Home className="h-4 w-4" /> },
-  { label: "My Classes", path: "/student/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Browse Teachers", path: "/student/browse", icon: <Search className="h-4 w-4" /> },
-  { label: "My Teachers", path: "/student/my-teachers", icon: <GraduationCap className="h-4 w-4" /> },
-  { label: "Settings", path: "/student/settings", icon: <Settings className="h-4 w-4" /> },
-];
+import { studentNav as navItems } from "@/lib/navItems";
+import { StudentStats, ClassData } from "@/lib/types";
 
 export default function StudentDashboard() {
   const { user } = useAuth();
-  const [stats, setStats] = useState<any>(null);
-  const [classes, setClasses] = useState<any[]>([]);
+  const [stats, setStats] = useState<StudentStats | null>(null);
+  const [classes, setClasses] = useState<ClassData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

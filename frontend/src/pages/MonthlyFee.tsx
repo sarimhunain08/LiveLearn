@@ -171,7 +171,7 @@ export default function MonthlyFee() {
   const [region, setRegion] = useState<Region>("usa");
 
   return (
-    <div className="h-screen overflow-y-auto scrollbar-none bg-background">
+    <div className="min-h-screen bg-background">
       <Navbar />
 
       {/* Hero */}
@@ -304,7 +304,7 @@ export default function MonthlyFee() {
           {/* Features comparison highlights */}
           <div className="mt-14 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { icon: <BookOpen className="h-6 w-6" />, title: "All Subjects", desc: "Math, Science, Languages, Quran & more" },
+              { icon: <BookOpen className="h-6 w-6" />, title: "Quran Studies", desc: "Tajweed, Hifz, Arabic & Islamic Studies" },
               { icon: <Clock className="h-6 w-6" />, title: "Flexible Timing", desc: "Morning, afternoon or evening slots" },
               { icon: <Users className="h-6 w-6" />, title: "Expert Tutors", desc: "Screened & qualified teachers" },
               { icon: <Zap className="h-6 w-6" />, title: "Free Trial", desc: "First week completely free" },

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Home, BookOpen, Search, Settings, Loader2, GraduationCap } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,14 +8,8 @@ import { api } from "@/lib/api";
 import { formatClassDateTime } from "@/lib/dateUtils";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-
-const navItems = [
-  { label: "Dashboard", path: "/student/dashboard", icon: <Home className="h-4 w-4" /> },
-  { label: "My Classes", path: "/student/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Browse Classes", path: "/student/browse", icon: <Search className="h-4 w-4" /> },
-  { label: "My Teachers", path: "/student/my-teachers", icon: <GraduationCap className="h-4 w-4" /> },
-  { label: "Settings", path: "/student/settings", icon: <Settings className="h-4 w-4" /> },
-];
+import { studentNav as navItems } from "@/lib/navItems";
+import { getErrorMessage, ClassData, User } from "@/lib/types";
 
 const subjects = ["All", "Math", "Science", "English", "History", "Art", "Programming", "Arabic"];
 
@@ -26,7 +20,7 @@ function capitalizeFirst(s: string) {
 export default function BrowseClasses() {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [classes, setClasses] = useState<any[]>([]);
+  const [classes, setClasses] = useState<ClassData[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("all");
@@ -35,7 +29,7 @@ export default function BrowseClasses() {
   const fetchClasses = async () => {
     setLoading(true);
     try {
-      const params: any = {};
+      const params: Record<string, string> = {};
       if (searchTerm) params.search = searchTerm;
       if (selectedSubject && selectedSubject !== "all") params.subject = selectedSubject;
       const res = await api.getClasses(params);
@@ -64,10 +58,10 @@ export default function BrowseClasses() {
       await api.enrollInClass(classId);
       toast({ title: "Enrolled successfully!" });
       fetchClasses();
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast({
         title: "Enrollment failed",
-        description: err?.message || "Something went wrong",
+        description: getErrorMessage(err),
         variant: "destructive",
       });
     } finally {
@@ -75,8 +69,8 @@ export default function BrowseClasses() {
     }
   };
 
-  const isEnrolled = (cls: any) => {
-    return cls.enrolledStudents?.some((s: any) =>
+  const isEnrolled = (cls: ClassData) => {
+    return cls.enrolledStudents?.some((s: User | string) =>
       typeof s === "string" ? s === user?.id : s._id === user?.id
     );
   };

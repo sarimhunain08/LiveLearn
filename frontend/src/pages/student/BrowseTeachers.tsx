@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
-  Home,
   BookOpen,
   Search,
-  Clock,
-  Settings,
   Globe,
   Languages,
   Users,
@@ -18,14 +15,7 @@ import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { api } from "@/lib/api";
-
-const navItems = [
-  { label: "Dashboard", path: "/student/dashboard", icon: <Home className="h-4 w-4" /> },
-  { label: "My Classes", path: "/student/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Browse Teachers", path: "/student/browse", icon: <Search className="h-4 w-4" /> },
-  { label: "My Teachers", path: "/student/my-teachers", icon: <GraduationCap className="h-4 w-4" /> },
-  { label: "Settings", path: "/student/settings", icon: <Settings className="h-4 w-4" /> },
-];
+import { studentNav as navItems } from "@/lib/navItems";
 
 interface Teacher {
   _id: string;

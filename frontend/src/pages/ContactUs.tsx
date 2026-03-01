@@ -9,19 +9,17 @@ import {
   MessageSquare,
   Headphones,
   GraduationCap,
-  Facebook,
-  Instagram,
-  Twitter,
-  Youtube,
   Loader2,
   AlertCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
 import { api } from "@/lib/api";
+import { getErrorMessage } from "@/lib/types";
 
 /* ------------------------------------------------------------------ */
 /*  CONTACT INFO CARDS DATA                                            */
@@ -74,7 +72,7 @@ export default function ContactUs() {
   const [error, setError] = useState<string | null>(null);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     if (error) setError(null);
@@ -88,15 +86,15 @@ export default function ContactUs() {
     try {
       await api.submitContact(formData);
       setSubmitted(true);
-    } catch (err: any) {
-      setError(err.message || "Something went wrong. Please try again.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="h-screen overflow-y-auto scrollbar-none bg-background">
+    <div className="min-h-screen bg-background">
       <Navbar />
 
       {/* Hero */}
@@ -225,23 +223,26 @@ export default function ContactUs() {
 
                   <div className="space-y-1.5">
                     <Label htmlFor="subject">Subject</Label>
-                    <select
-                      id="subject"
-                      name="subject"
-                      required
+                    <Select
                       value={formData.subject}
-                      onChange={handleChange}
-                      className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                      onValueChange={(value) => {
+                        setFormData({ ...formData, subject: value });
+                        if (error) setError(null);
+                      }}
                     >
-                      <option value="">Select a topic</option>
-                      <option value="general">General Inquiry</option>
-                      <option value="pricing">Pricing & Plans</option>
-                      <option value="technical">Technical Support</option>
-                      <option value="billing">Billing Issue</option>
-                      <option value="become-tutor">Become a Tutor</option>
-                      <option value="feedback">Feedback</option>
-                      <option value="other">Other</option>
-                    </select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a topic" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="general">General Inquiry</SelectItem>
+                        <SelectItem value="pricing">Pricing & Plans</SelectItem>
+                        <SelectItem value="technical">Technical Support</SelectItem>
+                        <SelectItem value="billing">Billing Issue</SelectItem>
+                        <SelectItem value="become-tutor">Become a Tutor</SelectItem>
+                        <SelectItem value="feedback">Feedback</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="space-y-1.5">
@@ -304,31 +305,6 @@ export default function ContactUs() {
                   </li>
                 ))}
               </ul>
-            </div>
-
-            {/* Social */}
-            <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-              <h3 className="font-bold text-foreground mb-3">Follow Us</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                Stay updated with the latest news, tips, and offers.
-              </p>
-              <div className="flex gap-3">
-                {[
-                  { icon: <Facebook className="h-4 w-4" />, label: "Facebook" },
-                  { icon: <Instagram className="h-4 w-4" />, label: "Instagram" },
-                  { icon: <Twitter className="h-4 w-4" />, label: "Twitter" },
-                  { icon: <Youtube className="h-4 w-4" />, label: "YouTube" },
-                ].map((s, i) => (
-                  <a
-                    key={i}
-                    href="#"
-                    title={s.label}
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary hover:bg-primary/5"
-                  >
-                    {s.icon}
-                  </a>
-                ))}
-              </div>
             </div>
 
             {/* Quick CTA */}

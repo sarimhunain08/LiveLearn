@@ -1,26 +1,20 @@
 import { useState, useEffect } from "react";
-import { Home, BookOpen, Search, Settings, Loader2, GraduationCap } from "lucide-react";
+import { BookOpen, Loader2 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatusBadge from "@/components/dashboard/StatusBadge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api } from "@/lib/api";
 import { formatClassDate, formatClassTime } from "@/lib/dateUtils";
 import { Link } from "react-router-dom";
-
-const navItems = [
-  { label: "Dashboard", path: "/student/dashboard", icon: <Home className="h-4 w-4" /> },
-  { label: "My Classes", path: "/student/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Browse Teachers", path: "/student/browse", icon: <Search className="h-4 w-4" /> },
-  { label: "My Teachers", path: "/student/my-teachers", icon: <GraduationCap className="h-4 w-4" /> },
-  { label: "Settings", path: "/student/settings", icon: <Settings className="h-4 w-4" /> },
-];
+import { studentNav as navItems } from "@/lib/navItems";
+import { ClassData } from "@/lib/types";
 
 function capitalizeFirst(s: string) {
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
 }
 
 export default function StudentClasses() {
-  const [classes, setClasses] = useState<any[]>([]);
+  const [classes, setClasses] = useState<ClassData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -50,7 +44,7 @@ export default function StudentClasses() {
   const enrolled = classes.filter(c => c.status === "scheduled" || c.status === "live");
   const completed = classes.filter(c => c.status === "completed");
 
-  const renderTable = (list: any[], emptyMsg: string) => (
+  const renderTable = (list: ClassData[], emptyMsg: string) => (
     list.length === 0 ? (
       <div className="py-12 text-center">
         <BookOpen className="mx-auto mb-3 h-10 w-10 text-muted-foreground/30" />

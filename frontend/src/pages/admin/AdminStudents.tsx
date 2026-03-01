@@ -1,28 +1,20 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  BarChart3, Users, GraduationCap, BookOpen, Settings, Search,
-  Loader2, AlertCircle, Trash2, Power, Mail, Plus
+  Search,
+  Loader2, AlertCircle, Trash2, Power, Plus
 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatusBadge from "@/components/dashboard/StatusBadge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
-
-const navItems = [
-  { label: "Dashboard", path: "/admin/dashboard", icon: <BarChart3 className="h-4 w-4" /> },
-  { label: "Teachers", path: "/admin/teachers", icon: <GraduationCap className="h-4 w-4" /> },
-  { label: "Students", path: "/admin/students", icon: <Users className="h-4 w-4" /> },
-  { label: "Classes", path: "/admin/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Messages", path: "/admin/contacts", icon: <Mail className="h-4 w-4" /> },
-  { label: "Reports", path: "/admin/reports", icon: <BarChart3 className="h-4 w-4" /> },
-  { label: "Settings", path: "/admin/settings", icon: <Settings className="h-4 w-4" /> },
-];
+import { adminNav as navItems } from "@/lib/navItems";
+import { getErrorMessage, User } from "@/lib/types";
 
 export default function AdminStudents() {
   const navigate = useNavigate();
-  const [students, setStudents] = useState<any[]>([]);
+  const [students, setStudents] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -34,8 +26,8 @@ export default function AdminStudents() {
       const res = await api.getAdminStudents({ search: search || undefined });
       setStudents(res.data);
       setError(null);
-    } catch (err: any) {
-      setError(err.message || "Failed to load students");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -53,8 +45,8 @@ export default function AdminStudents() {
       setStudents((prev) =>
         prev.map((s) => (s._id === id ? { ...s, isActive: !s.isActive } : s))
       );
-    } catch (err: any) {
-      alert(err.message || "Failed to toggle status");
+    } catch (err: unknown) {
+      alert(getErrorMessage(err));
     } finally {
       setActionLoading(null);
     }
@@ -66,8 +58,8 @@ export default function AdminStudents() {
     try {
       await api.deleteUser(id);
       setStudents((prev) => prev.filter((s) => s._id !== id));
-    } catch (err: any) {
-      alert(err.message || "Failed to delete student");
+    } catch (err: unknown) {
+      alert(getErrorMessage(err));
     } finally {
       setActionLoading(null);
     }

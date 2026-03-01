@@ -1,22 +1,14 @@
 import { useState, useEffect } from "react";
 import {
-  BarChart3, Users, GraduationCap, BookOpen, Activity, Settings,
-  Loader2, AlertCircle, Mail, MessageSquare
+  BarChart3, Users, GraduationCap, BookOpen, Activity,
+  Loader2, AlertCircle, MessageSquare
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatCard from "@/components/dashboard/StatCard";
 import { api } from "@/lib/api";
-
-const navItems = [
-  { label: "Dashboard", path: "/admin/dashboard", icon: <BarChart3 className="h-4 w-4" /> },
-  { label: "Teachers", path: "/admin/teachers", icon: <GraduationCap className="h-4 w-4" /> },
-  { label: "Students", path: "/admin/students", icon: <Users className="h-4 w-4" /> },
-  { label: "Classes", path: "/admin/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Messages", path: "/admin/contacts", icon: <Mail className="h-4 w-4" /> },
-  { label: "Reports", path: "/admin/reports", icon: <BarChart3 className="h-4 w-4" /> },
-  { label: "Settings", path: "/admin/settings", icon: <Settings className="h-4 w-4" /> },
-];
+import { adminNav as navItems } from "@/lib/navItems";
+import { getErrorMessage } from "@/lib/types";
 
 interface Stats {
   totalTeachers: number;
@@ -36,8 +28,8 @@ export default function AdminDashboard() {
       try {
         const res = await api.getAdminStats();
         setStats(res.data);
-      } catch (err: any) {
-        setError(err.message || "Failed to load stats");
+      } catch (err: unknown) {
+        setError(getErrorMessage(err));
       } finally {
         setLoading(false);
       }

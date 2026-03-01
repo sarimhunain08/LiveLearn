@@ -1,24 +1,15 @@
 import { useState, useEffect } from "react";
 import {
-  BarChart3, Users, GraduationCap, BookOpen, Settings,
-  Loader2, AlertCircle, Mail, TrendingUp
+  Loader2, AlertCircle, TrendingUp
 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
-
-const navItems = [
-  { label: "Dashboard", path: "/admin/dashboard", icon: <BarChart3 className="h-4 w-4" /> },
-  { label: "Teachers", path: "/admin/teachers", icon: <GraduationCap className="h-4 w-4" /> },
-  { label: "Students", path: "/admin/students", icon: <Users className="h-4 w-4" /> },
-  { label: "Classes", path: "/admin/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Messages", path: "/admin/contacts", icon: <Mail className="h-4 w-4" /> },
-  { label: "Reports", path: "/admin/reports", icon: <BarChart3 className="h-4 w-4" /> },
-  { label: "Settings", path: "/admin/settings", icon: <Settings className="h-4 w-4" /> },
-];
+import { adminNav as navItems } from "@/lib/navItems";
+import { getErrorMessage, AdminReportsData, DistributionItem } from "@/lib/types";
 
 export default function AdminReports() {
-  const [reports, setReports] = useState<any>(null);
+  const [reports, setReports] = useState<AdminReportsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,8 +18,8 @@ export default function AdminReports() {
       try {
         const res = await api.getAdminReports();
         setReports(res.data);
-      } catch (err: any) {
-        setError(err.message || "Failed to load reports");
+      } catch (err: unknown) {
+        setError(getErrorMessage(err));
       } finally {
         setLoading(false);
       }
@@ -51,7 +42,20 @@ export default function AdminReports() {
       <DashboardLayout navItems={navItems} title="Reports & Analytics">
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <AlertCircle className="h-10 w-10 text-destructive mb-3" />
-          <p className="text-sm text-destructive font-medium">{error}</p>
+          <p className="text-sm text-destructive font-medium mb-4">{error}</p>
+          <Button
+            variant="outline"
+            onClick={() => {
+              setError(null);
+              setLoading(true);
+              api.getAdminReports()
+                .then((res) => setReports(res.data))
+                .catch((err: unknown) => setError(getErrorMessage(err)))
+                .finally(() => setLoading(false));
+            }}
+          >
+            Retry
+          </Button>
         </div>
       </DashboardLayout>
     );
@@ -97,7 +101,7 @@ export default function AdminReports() {
           </h3>
           {reports?.subjectDistribution?.length ? (
             <div className="space-y-3">
-              {reports.subjectDistribution.map((item: any) => {
+              {reports.subjectDistribution.map((item: DistributionItem) => {
                 const maxCount = reports.subjectDistribution[0]?.count || 1;
                 const pct = Math.round((item.count / maxCount) * 100);
                 return (
@@ -125,7 +129,7 @@ export default function AdminReports() {
           </h3>
           {reports?.statusDistribution?.length ? (
             <div className="space-y-3">
-              {reports.statusDistribution.map((item: any) => (
+              {reports.statusDistribution.map((item: DistributionItem) => (
                 <div key={item._id} className="flex items-center justify-between rounded-lg border border-border p-3">
                   <span className="text-sm font-medium text-foreground capitalize">{item._id}</span>
                   <span className="text-lg font-bold text-primary">{item.count}</span>

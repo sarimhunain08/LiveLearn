@@ -1,20 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { Home, BookOpen, Search, Clock, Settings, Loader2, ArrowLeft, Calendar, User, Video, GraduationCap } from "lucide-react";
+import { Clock, Loader2, ArrowLeft, Calendar, User, Video } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatusBadge from "@/components/dashboard/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { getClassStartDate, formatClassDate, formatClassTime, parseDurationMinutes, getViewerTimezoneShort } from "@/lib/dateUtils";
-
-const navItems = [
-  { label: "Dashboard", path: "/student/dashboard", icon: <Home className="h-4 w-4" /> },
-  { label: "My Classes", path: "/student/classes", icon: <BookOpen className="h-4 w-4" /> },
-  { label: "Browse Teachers", path: "/student/browse", icon: <Search className="h-4 w-4" /> },
-  { label: "My Teachers", path: "/student/my-teachers", icon: <GraduationCap className="h-4 w-4" /> },
-  { label: "Settings", path: "/student/settings", icon: <Settings className="h-4 w-4" /> },
-];
+import { studentNav as navItems } from "@/lib/navItems";
+import { ClassData } from "@/lib/types";
 
 function capitalizeFirst(s: string) {
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
@@ -44,7 +38,7 @@ export default function ClassDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [cls, setCls] = useState<any>(null);
+  const [cls, setCls] = useState<ClassData | null>(null);
   const [loading, setLoading] = useState(true);
   const [countdown, setCountdown] = useState<Countdown | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval>>();
