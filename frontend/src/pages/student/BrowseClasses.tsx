@@ -77,7 +77,7 @@ export default function BrowseClasses() {
 
   const isEnrolled = (cls: any) => {
     return cls.enrolledStudents?.some((s: any) =>
-      typeof s === "string" ? s === user?._id : s._id === user?._id
+      typeof s === "string" ? s === user?.id : s._id === user?.id
     );
   };
 

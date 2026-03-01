@@ -43,6 +43,34 @@ export default function MeetingRoom() {
 
     const roomName = `Ilmify_${cls._id}`;
     const isTeacher = user.role === "teacher";
+    let cancelled = false;
+    let scriptEl: HTMLScriptElement | null = null;
+
+    const loadJitsiScript = (): Promise<void> => {
+      // If the API is already available, resolve immediately
+      if (window.JitsiMeetExternalAPI) return Promise.resolve();
+
+      // Check if script tag already exists
+      const existing = document.querySelector(
+        'script[src*="8x8.vc/vpaas-magic-cookie"]'
+      ) as HTMLScriptElement | null;
+
+      if (existing) {
+        return new Promise((resolve) => {
+          if (window.JitsiMeetExternalAPI) return resolve();
+          existing.addEventListener("load", () => resolve(), { once: true });
+        });
+      }
+
+      return new Promise((resolve) => {
+        scriptEl = document.createElement("script");
+        scriptEl.src =
+          "https://8x8.vc/vpaas-magic-cookie-5ef6ff40e35f44cd9828013d33d85820/external_api.js";
+        scriptEl.async = true;
+        scriptEl.onload = () => resolve();
+        document.head.appendChild(scriptEl);
+      });
+    };
 
     const initMeeting = async () => {
       try {
@@ -60,56 +88,51 @@ export default function MeetingRoom() {
         const tokenRes = await api.getJitsiToken(roomName);
         const { token } = tokenRes.data;
 
-        // 2. Load the JaaS external API script (8x8.vc, not meet.jit.si)
-        const script = document.createElement("script");
-        script.src = "https://8x8.vc/vpaas-magic-cookie-5ef6ff40e35f44cd9828013d33d85820/external_api.js";
-        script.async = true;
-        script.onload = () => {
-          if (!jitsiRef.current || !window.JitsiMeetExternalAPI) return;
+        // 2. Load the JaaS external API script (only once)
+        await loadJitsiScript();
 
-          apiRef.current = new window.JitsiMeetExternalAPI("8x8.vc", {
-            roomName: `vpaas-magic-cookie-5ef6ff40e35f44cd9828013d33d85820/${roomName}`,
-            parentNode: jitsiRef.current,
-            jwt: token,
-            width: "100%",
-            height: "100%",
-            configOverwrite: {
-              startWithAudioMuted: !isTeacher,
-              startWithVideoMuted: false,
-              prejoinPageEnabled: false,
-              disableDeepLinking: true,
-              subject: cls.title,
-            },
-            interfaceConfigOverwrite: {
-              TOOLBAR_BUTTONS: [
-                "microphone",
-                "camera",
-                "desktop",
-                "chat",
-                "raisehand",
-                "fullscreen",
-                "hangup",
-                "participants-pane",
-                "tileview",
-                ...(isTeacher ? ["mute-everyone", "recording", "settings"] : []),
-              ],
-              SHOW_JITSI_WATERMARK: false,
-              SHOW_WATERMARK_FOR_GUESTS: false,
-              DEFAULT_BACKGROUND: "#1a1a2e",
-            },
-          });
+        if (cancelled || !jitsiRef.current || !window.JitsiMeetExternalAPI) return;
 
-          // When user hangs up, navigate back
-          apiRef.current.addEventListener("readyToClose", async () => {
-            // If teacher hangs up, mark class as completed
-            if (isTeacher) {
-              try { await api.endClass(cls._id); } catch (e) { console.log("Could not end class:", e); }
-            }
-            navigate(-1);
-          });
-        };
+        apiRef.current = new window.JitsiMeetExternalAPI("8x8.vc", {
+          roomName: `vpaas-magic-cookie-5ef6ff40e35f44cd9828013d33d85820/${roomName}`,
+          parentNode: jitsiRef.current,
+          jwt: token,
+          width: "100%",
+          height: "100%",
+          configOverwrite: {
+            startWithAudioMuted: !isTeacher,
+            startWithVideoMuted: false,
+            prejoinPageEnabled: false,
+            disableDeepLinking: true,
+            subject: cls.title,
+          },
+          interfaceConfigOverwrite: {
+            TOOLBAR_BUTTONS: [
+              "microphone",
+              "camera",
+              "desktop",
+              "chat",
+              "raisehand",
+              "fullscreen",
+              "hangup",
+              "participants-pane",
+              "tileview",
+              ...(isTeacher ? ["mute-everyone", "recording", "settings"] : []),
+            ],
+            SHOW_JITSI_WATERMARK: false,
+            SHOW_WATERMARK_FOR_GUESTS: false,
+            DEFAULT_BACKGROUND: "#1a1a2e",
+          },
+        });
 
-        document.head.appendChild(script);
+        // When user hangs up, navigate back
+        apiRef.current.addEventListener("readyToClose", async () => {
+          // If teacher hangs up, mark class as completed
+          if (isTeacher) {
+            try { await api.endClass(cls._id); } catch (e) { console.log("Could not end class:", e); }
+          }
+          navigate(-1);
+        });
       } catch (err) {
         console.error("Failed to initialize meeting:", err);
       }
@@ -118,9 +141,14 @@ export default function MeetingRoom() {
     initMeeting();
 
     return () => {
+      cancelled = true;
       if (apiRef.current) {
         apiRef.current.dispose();
         apiRef.current = null;
+      }
+      // Remove script tag only if we created it in this effect
+      if (scriptEl && scriptEl.parentNode) {
+        scriptEl.parentNode.removeChild(scriptEl);
       }
     };
   }, [cls, user, navigate]);
