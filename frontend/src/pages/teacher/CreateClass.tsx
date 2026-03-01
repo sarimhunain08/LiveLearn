@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, Plus, BookOpen, Users, DollarSign, Settings, CheckCircle, Loader2 } from "lucide-react";
+import { Home, Plus, BookOpen, Users, Settings, CheckCircle, Loader2 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,7 +14,6 @@ const navItems = [
   { label: "Create Class", path: "/teacher/create-class", icon: <Plus className="h-4 w-4" /> },
   { label: "My Classes", path: "/teacher/classes", icon: <BookOpen className="h-4 w-4" /> },
   { label: "Students", path: "/teacher/students", icon: <Users className="h-4 w-4" /> },
-  { label: "Earnings", path: "#", icon: <DollarSign className="h-4 w-4 opacity-40" /> },
   { label: "Settings", path: "/teacher/settings", icon: <Settings className="h-4 w-4" /> },
 ];
 
@@ -37,6 +36,7 @@ export default function CreateClass() {
   const [recording, setRecording] = useState(false);
 
   const { toast } = useToast();
+  const [attempted, setAttempted] = useState(false);
 
   const resetForm = () => {
     setTitle("");
@@ -50,10 +50,22 @@ export default function CreateClass() {
     setScreenShare(true);
     setRecording(false);
     setShowSuccess(false);
+    setAttempted(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setAttempted(true);
+
+    if (!subject || !duration) {
+      toast({
+        title: "Missing fields",
+        description: `Please select ${!subject ? "a subject" : ""}${!subject && !duration ? " and " : ""}${!duration ? "a duration" : ""}.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -119,8 +131,8 @@ export default function CreateClass() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-foreground">Subject *</label>
-                  <Select value={subject} onValueChange={setSubject} required>
-                    <SelectTrigger><SelectValue placeholder="Select subject" /></SelectTrigger>
+                  <Select value={subject} onValueChange={setSubject}>
+                    <SelectTrigger className={attempted && !subject ? "ring-2 ring-destructive" : ""}><SelectValue placeholder="Select subject" /></SelectTrigger>
                     <SelectContent>
                       {subjects.map(s => (
                         <SelectItem key={s} value={s.toLowerCase()}>{s}</SelectItem>
@@ -154,8 +166,8 @@ export default function CreateClass() {
               </div>
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-foreground">Duration *</label>
-                <Select value={duration} onValueChange={setDuration} required>
-                  <SelectTrigger><SelectValue placeholder="Duration" /></SelectTrigger>
+                <Select value={duration} onValueChange={setDuration}>
+                  <SelectTrigger className={attempted && !duration ? "ring-2 ring-destructive" : ""}><SelectValue placeholder="Duration" /></SelectTrigger>
                   <SelectContent>
                     {["30 min", "45 min", "60 min", "90 min", "120 min"].map(d => (
                       <SelectItem key={d} value={d}>{d}</SelectItem>
@@ -197,7 +209,7 @@ export default function CreateClass() {
           {/* Actions */}
           <div className="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end">
             <Button type="button" variant="outline" onClick={() => window.history.back()}>Cancel</Button>
-            <Button type="submit" disabled={isLoading || !title || !subject || !date || !time || !duration} className="gradient-primary text-primary-foreground border-0 px-8">
+            <Button type="submit" disabled={isLoading} className="gradient-primary text-primary-foreground border-0 px-8">
               {isLoading ? <><Loader2 className="h-4 w-4 animate-spin mr-2" /> Saving...</> : "Save Class"}
             </Button>
           </div>

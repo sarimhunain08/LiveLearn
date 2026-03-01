@@ -78,8 +78,13 @@ class ApiClient {
   }
 
   async logout() {
-    localStorage.removeItem("token");
-    return this.request("/auth/logout", { method: "POST" });
+    try {
+      await this.request("/auth/logout", { method: "POST" });
+    } catch (_) {
+      // ignore — server may be unreachable
+    } finally {
+      localStorage.removeItem("token");
+    }
   }
 
   async updatePassword(currentPassword: string, newPassword: string) {

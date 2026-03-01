@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Home, Plus, BookOpen, Users, DollarSign, Settings, Loader2, Video } from "lucide-react";
+import { Home, Plus, BookOpen, Users, Settings, Loader2, Video } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatusBadge from "@/components/dashboard/StatusBadge";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,6 @@ const navItems = [
   { label: "Create Class", path: "/teacher/create-class", icon: <Plus className="h-4 w-4" /> },
   { label: "My Classes", path: "/teacher/classes", icon: <BookOpen className="h-4 w-4" /> },
   { label: "Students", path: "/teacher/students", icon: <Users className="h-4 w-4" /> },
-  { label: "Earnings", path: "#", icon: <DollarSign className="h-4 w-4 opacity-40" /> },
   { label: "Settings", path: "/teacher/settings", icon: <Settings className="h-4 w-4" /> },
 ];
 

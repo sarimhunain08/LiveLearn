@@ -2,7 +2,7 @@ import { ReactNode, useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   GraduationCap, Bell, LogOut, ChevronLeft, Menu, X,
-  User, Settings, HelpCircle
+  User, Settings
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -51,6 +51,12 @@ export default function DashboardLayout({ children, navItems, title }: Dashboard
   const handleLogout = () => {
     logout();
     navigate("/");
+  };
+
+  const getSettingsPath = () => {
+    if (location.pathname.startsWith("/teacher")) return "/teacher/settings";
+    if (location.pathname.startsWith("/admin")) return "/admin/settings";
+    return "/student/settings";
   };
 
   const SidebarContent = ({ isMobile = false }: { isMobile?: boolean }) => (
@@ -175,9 +181,8 @@ export default function DashboardLayout({ children, navItems, title }: Dashboard
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem className="gap-2"><User className="h-4 w-4" /> Profile</DropdownMenuItem>
-                <DropdownMenuItem className="gap-2"><Settings className="h-4 w-4" /> Settings</DropdownMenuItem>
-                <DropdownMenuItem className="gap-2"><HelpCircle className="h-4 w-4" /> Help</DropdownMenuItem>
+                <DropdownMenuItem className="gap-2" onClick={() => navigate(getSettingsPath())}><User className="h-4 w-4" /> Profile</DropdownMenuItem>
+                <DropdownMenuItem className="gap-2" onClick={() => navigate(getSettingsPath())}><Settings className="h-4 w-4" /> Settings</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="gap-2 text-destructive" onClick={handleLogout}>
                   <LogOut className="h-4 w-4" /> Logout
