@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Search,
-  Loader2, AlertCircle, Trash2, Power, Plus
+  Loader2, AlertCircle, Trash2, Power, Plus, GraduationCap
 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatusBadge from "@/components/dashboard/StatusBadge";
