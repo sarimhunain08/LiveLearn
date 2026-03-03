@@ -118,13 +118,13 @@ export default function CreateClass() {
             <div className="space-y-4">
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-foreground">Class Title *</label>
-                <Input placeholder="e.g., Introduction to Calculus" value={title} onChange={(e) => setTitle(e.target.value)} required />
+                <Input placeholder="e.g., Introduction to Calculus" className="h-11 rounded-xl" value={title} onChange={(e) => setTitle(e.target.value)} required />
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-foreground">Subject *</label>
                   <Select value={subject} onValueChange={setSubject}>
-                    <SelectTrigger className={attempted && !subject ? "ring-2 ring-destructive" : ""}><SelectValue placeholder="Select subject" /></SelectTrigger>
+                    <SelectTrigger className={`h-11 rounded-xl ${attempted && !subject ? "ring-2 ring-destructive" : ""}`}><SelectValue placeholder="Select subject" /></SelectTrigger>
                     <SelectContent>
                       {subjects.map(s => (
                         <SelectItem key={s} value={s.toLowerCase()}>{s}</SelectItem>
@@ -134,12 +134,12 @@ export default function CreateClass() {
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-foreground">Max Students</label>
-                  <Input type="number" value={maxStudents} onChange={(e) => setMaxStudents(Number(e.target.value))} min={1} max={500} />
+                  <Input type="number" className="h-11 rounded-xl" value={maxStudents} onChange={(e) => setMaxStudents(Number(e.target.value))} min={1} max={500} />
                 </div>
               </div>
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-foreground">Description</label>
-                <Textarea placeholder="Describe what students will learn..." rows={3} value={description} onChange={(e) => setDescription(e.target.value)} />
+                <Textarea className="rounded-xl" placeholder="Describe what students will learn..." rows={3} value={description} onChange={(e) => setDescription(e.target.value)} />
               </div>
             </div>
           </div>
@@ -150,16 +150,16 @@ export default function CreateClass() {
             <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-foreground">Date *</label>
-                <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+                <Input type="date" className="h-11 rounded-xl" value={date} onChange={(e) => setDate(e.target.value)} required />
               </div>
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-foreground">Time *</label>
-                <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
+                <Input type="time" className="h-11 rounded-xl" value={time} onChange={(e) => setTime(e.target.value)} required />
               </div>
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-foreground">Duration *</label>
                 <Select value={duration} onValueChange={setDuration}>
-                  <SelectTrigger className={attempted && !duration ? "ring-2 ring-destructive" : ""}><SelectValue placeholder="Duration" /></SelectTrigger>
+                  <SelectTrigger className={`h-11 rounded-xl ${attempted && !duration ? "ring-2 ring-destructive" : ""}`}><SelectValue placeholder="Duration" /></SelectTrigger>
                   <SelectContent>
                     {["30 min", "45 min", "60 min", "90 min", "120 min"].map(d => (
                       <SelectItem key={d} value={d}>{d}</SelectItem>
@@ -200,8 +200,8 @@ export default function CreateClass() {
 
           {/* Actions */}
           <div className="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end">
-            <Button type="button" variant="outline" onClick={() => window.history.back()}>Cancel</Button>
-            <Button type="submit" disabled={isLoading} className="gradient-primary text-primary-foreground border-0 px-8">
+            <Button type="button" variant="outline" className="rounded-xl" onClick={() => window.history.back()}>Cancel</Button>
+            <Button type="submit" disabled={isLoading} className="gradient-primary text-primary-foreground border-0 px-8 h-11 rounded-xl font-semibold shadow-lg shadow-primary/20">
               {isLoading ? <><Loader2 className="h-4 w-4 animate-spin mr-2" /> Saving...</> : "Save Class"}
             </Button>
           </div>

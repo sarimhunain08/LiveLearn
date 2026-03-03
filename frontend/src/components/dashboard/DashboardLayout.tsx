@@ -157,33 +157,38 @@ export default function DashboardLayout({ children, navItems, title }: Dashboard
       {/* Main */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="flex h-14 sm:h-16 items-center justify-between border-b border-border bg-card px-3 sm:px-4 md:px-6">
+        <header className="flex h-14 sm:h-16 items-center justify-between border-b border-border bg-card/80 backdrop-blur-sm px-3 sm:px-4 md:px-6 shadow-sm">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             <button
-              className="md:hidden rounded-md p-1.5 text-muted-foreground hover:text-foreground flex-shrink-0"
+              className="md:hidden rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors flex-shrink-0"
               onClick={() => setMobileOpen(true)}
             >
               <Menu className="h-5 w-5" />
             </button>
-            <h1 className="text-base sm:text-lg font-semibold text-foreground truncate">{title}</h1>
+            <h1 className="text-base sm:text-lg font-semibold text-foreground truncate tracking-tight">{title}</h1>
           </div>
 
-          <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
             <button
               aria-label="Notifications"
-              className="relative rounded-md p-1.5 sm:p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+              className="relative rounded-lg p-1.5 sm:p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
             >
               <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-destructive" />
             </button>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full gradient-primary text-xs font-semibold text-primary-foreground">
+                <button className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full gradient-primary text-xs font-semibold text-primary-foreground ring-2 ring-primary/20 hover:ring-primary/40 transition-all">
                   {user?.name?.charAt(0) || "U"}
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem className="gap-2" onClick={() => navigate(getSettingsPath())}><User className="h-4 w-4" /> Profile</DropdownMenuItem>
+              <DropdownMenuContent align="end" className="w-52 rounded-xl shadow-lg">
+                <div className="px-3 py-2 border-b border-border">
+                  <p className="text-sm font-medium text-foreground truncate">{user?.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                </div>
+                <DropdownMenuItem className="gap-2 mt-1" onClick={() => navigate(getSettingsPath())}><User className="h-4 w-4" /> Profile</DropdownMenuItem>
                 <DropdownMenuItem className="gap-2" onClick={() => navigate(getSettingsPath())}><Settings className="h-4 w-4" /> Settings</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="gap-2 text-destructive" onClick={handleLogout}>

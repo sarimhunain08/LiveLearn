@@ -22,13 +22,15 @@ const ForgotPassword = () => {
           <p className="mt-1 text-muted-foreground">We'll send you a reset link</p>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-8 shadow-card">
+        <div className="rounded-2xl border border-border bg-card p-8 shadow-card">
           {sent ? (
-            <div className="text-center py-4">
-              <CheckCircle className="mx-auto mb-4 h-12 w-12 text-success" />
-              <p className="font-medium text-foreground">Check your email</p>
+            <div className="text-center py-6">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-green-100 dark:bg-green-500/20">
+                <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
+              </div>
+              <p className="text-lg font-semibold text-foreground">Check your email</p>
               <p className="mt-2 text-sm text-muted-foreground">
-                We sent a password reset link to {email}
+                We sent a password reset link to <span className="font-medium text-foreground">{email}</span>
               </p>
             </div>
           ) : (
@@ -37,10 +39,10 @@ const ForgotPassword = () => {
                 <label className="mb-1.5 block text-sm font-medium text-foreground">Email</label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input type="email" placeholder="you@example.com" className="pl-10" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                  <Input type="email" placeholder="you@example.com" className="pl-10 h-11 rounded-xl" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>
               </div>
-              <Button type="submit" className="gradient-primary text-primary-foreground border-0 w-full">
+              <Button type="submit" className="gradient-primary text-primary-foreground border-0 w-full h-11 rounded-xl font-semibold shadow-lg shadow-primary/20">
                 Send Reset Link
               </Button>
             </form>

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Search,
-  Loader2, AlertCircle, Trash2, Power, Plus
+  Loader2, AlertCircle, Trash2, Power, Plus, Users
 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatusBadge from "@/components/dashboard/StatusBadge";
@@ -67,18 +67,18 @@ export default function AdminStudents() {
 
   return (
     <DashboardLayout navItems={navItems} title="Manage Students">
-      <div className="mb-4 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+      <div className="mb-6 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
         <div className="relative max-w-sm flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search students..."
-            className="pl-10"
+            className="pl-10 h-11 rounded-xl"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <Button onClick={() => navigate("/admin/students/create")}>
-          <Plus className="h-4 w-4 mr-2" /> Create Student
+        <Button className="rounded-xl h-10 px-5 gap-2 font-medium" onClick={() => navigate("/admin/students/create")}>
+          <Plus className="h-4 w-4" /> Create Student
         </Button>
       </div>
 

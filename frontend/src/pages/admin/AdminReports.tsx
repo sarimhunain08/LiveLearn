@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import {
-  Loader2, AlertCircle, TrendingUp
+  Loader2, AlertCircle, TrendingUp, Users, BookOpen
 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";

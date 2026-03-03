@@ -70,27 +70,22 @@ export default function AdminDashboard() {
       </div>
 
       {/* Quick Links */}
+      <h2 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Link to="/admin/teachers" className="rounded-xl border border-border bg-card p-5 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all">
-          <GraduationCap className="h-6 w-6 text-primary mb-2" />
-          <h3 className="font-semibold text-foreground text-sm">Manage Teachers</h3>
-          <p className="text-xs text-muted-foreground mt-1">View, activate/deactivate, or remove teachers</p>
-        </Link>
-        <Link to="/admin/students" className="rounded-xl border border-border bg-card p-5 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all">
-          <Users className="h-6 w-6 text-primary mb-2" />
-          <h3 className="font-semibold text-foreground text-sm">Manage Students</h3>
-          <p className="text-xs text-muted-foreground mt-1">View, activate/deactivate, or remove students</p>
-        </Link>
-        <Link to="/admin/classes" className="rounded-xl border border-border bg-card p-5 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all">
-          <BookOpen className="h-6 w-6 text-primary mb-2" />
-          <h3 className="font-semibold text-foreground text-sm">Manage Classes</h3>
-          <p className="text-xs text-muted-foreground mt-1">Browse and manage all classes</p>
-        </Link>
-        <Link to="/admin/contacts" className="rounded-xl border border-border bg-card p-5 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all">
-          <MessageSquare className="h-6 w-6 text-primary mb-2" />
-          <h3 className="font-semibold text-foreground text-sm">Contact Messages</h3>
-          <p className="text-xs text-muted-foreground mt-1">View and respond to contact form submissions</p>
-        </Link>
+        {[
+          { to: "/admin/teachers", icon: GraduationCap, title: "Manage Teachers", desc: "View, activate/deactivate, or remove teachers", color: "bg-blue-500/10 text-blue-600 dark:text-blue-400" },
+          { to: "/admin/students", icon: Users, title: "Manage Students", desc: "View, activate/deactivate, or remove students", color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" },
+          { to: "/admin/classes", icon: BookOpen, title: "Manage Classes", desc: "Browse and manage all classes", color: "bg-purple-500/10 text-purple-600 dark:text-purple-400" },
+          { to: "/admin/contacts", icon: MessageSquare, title: "Contact Messages", desc: "View and respond to contact form submissions", color: "bg-orange-500/10 text-orange-600 dark:text-orange-400" },
+        ].map((item) => (
+          <Link key={item.to} to={item.to} className="group rounded-xl border border-border bg-card p-5 shadow-card hover:shadow-card-hover hover:border-primary/20 hover:-translate-y-0.5 transition-all">
+            <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${item.color} mb-3 group-hover:scale-110 transition-transform`}>
+              <item.icon className="h-5 w-5" />
+            </div>
+            <h3 className="font-semibold text-foreground text-sm">{item.title}</h3>
+            <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{item.desc}</p>
+          </Link>
+        ))}
       </div>
     </DashboardLayout>
   );

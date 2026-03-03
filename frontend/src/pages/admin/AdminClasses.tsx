@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import {
   Search,
-  Loader2, AlertCircle
+  Loader2, AlertCircle, BookOpen
 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatusBadge from "@/components/dashboard/StatusBadge";
@@ -42,18 +42,18 @@ export default function AdminClasses() {
 
   return (
     <DashboardLayout navItems={navItems} title="Manage Classes">
-      <div className="mb-4 flex flex-wrap gap-3">
+      <div className="mb-6 flex flex-wrap gap-3">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search classes..."
-            className="pl-10"
+            className="pl-10 h-11 rounded-xl"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-36"><SelectValue placeholder="Status" /></SelectTrigger>
+          <SelectTrigger className="w-36 h-11 rounded-xl"><SelectValue placeholder="Status" /></SelectTrigger>
           <SelectContent>
             {["All", "Scheduled", "Live", "Completed", "Cancelled"].map(s => (
               <SelectItem key={s} value={s.toLowerCase()}>{s}</SelectItem>

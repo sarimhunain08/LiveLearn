@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Loader2, AlertCircle, CheckCircle2, ArrowLeft, Plus,
+  Loader2, AlertCircle, CheckCircle2, ArrowLeft, Plus, Users,
 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Input } from "@/components/ui/input";
@@ -58,7 +58,7 @@ export default function AdminCreateStudent() {
 
   if (success) {
     return (
-      <DashboardLayout title="Create Student" navItems={navItems} role="admin">
+      <DashboardLayout title="Create Student" navItems={navItems}>
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <CheckCircle2 className="h-16 w-16 text-green-500 mb-4" />
           <h2 className="text-2xl font-bold mb-2">Student Created Successfully!</h2>
@@ -77,19 +77,19 @@ export default function AdminCreateStudent() {
   }
 
   return (
-    <DashboardLayout title="Create Student" navItems={navItems} role="admin">
+    <DashboardLayout title="Create Student" navItems={navItems}>
       <div className="max-w-lg mx-auto">
         <Button variant="ghost" className="mb-4" onClick={() => navigate("/admin/students")}>
           <ArrowLeft className="h-4 w-4 mr-2" /> Back to Students
         </Button>
 
-        <div className="bg-white rounded-xl shadow-sm border p-6">
+        <div className="bg-card rounded-2xl shadow-card border border-border p-6 sm:p-8">
           <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
             <Users className="h-5 w-5 text-primary" /> New Student Account
           </h2>
 
           {error && (
-            <div className="bg-red-50 text-red-700 px-4 py-3 rounded-lg flex items-center gap-2 mb-4">
+            <div className="bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400 px-4 py-3 rounded-xl flex items-center gap-2 mb-4">
               <AlertCircle className="h-4 w-4 flex-shrink-0" /> {error}
             </div>
           )}
@@ -97,22 +97,22 @@ export default function AdminCreateStudent() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <Label htmlFor="name">Full Name *</Label>
-              <Input id="name" placeholder="Student Name" value={form.name} onChange={(e) => updateField("name", e.target.value)} />
+              <Input id="name" className="h-11 rounded-xl" placeholder="Student Name" value={form.name} onChange={(e) => updateField("name", e.target.value)} />
             </div>
 
             <div>
               <Label htmlFor="email">Email *</Label>
-              <Input id="email" type="email" placeholder="student@example.com" value={form.email} onChange={(e) => updateField("email", e.target.value)} />
+              <Input id="email" type="email" className="h-11 rounded-xl" placeholder="student@example.com" value={form.email} onChange={(e) => updateField("email", e.target.value)} />
             </div>
 
             <div>
               <Label htmlFor="password">Password *</Label>
-              <Input id="password" type="password" placeholder="Minimum 6 characters" value={form.password} onChange={(e) => updateField("password", e.target.value)} />
+              <Input id="password" type="password" className="h-11 rounded-xl" placeholder="Minimum 6 characters" value={form.password} onChange={(e) => updateField("password", e.target.value)} />
             </div>
 
             <div className="flex justify-end gap-3 pt-4 border-t">
-              <Button type="button" variant="outline" onClick={() => navigate("/admin/students")}>Cancel</Button>
-              <Button type="submit" disabled={loading}>
+              <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate("/admin/students")}>Cancel</Button>
+              <Button type="submit" disabled={loading} className="gradient-primary text-primary-foreground border-0 rounded-xl px-6 font-semibold shadow-lg shadow-primary/20">
                 {loading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Plus className="h-4 w-4 mr-2" />}
                 Create Student
               </Button>

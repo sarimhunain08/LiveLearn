@@ -87,7 +87,7 @@ export default function AdminCreateTeacher() {
 
   if (success) {
     return (
-      <DashboardLayout title="Create Teacher" navItems={navItems} role="admin">
+      <DashboardLayout title="Create Teacher" navItems={navItems}>
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <CheckCircle2 className="h-16 w-16 text-green-500 mb-4" />
           <h2 className="text-2xl font-bold mb-2">Teacher Created Successfully!</h2>
@@ -106,19 +106,19 @@ export default function AdminCreateTeacher() {
   }
 
   return (
-    <DashboardLayout title="Create Teacher" navItems={navItems} role="admin">
+    <DashboardLayout title="Create Teacher" navItems={navItems}>
       <div className="max-w-2xl mx-auto">
         <Button variant="ghost" className="mb-4" onClick={() => navigate("/admin/teachers")}>
           <ArrowLeft className="h-4 w-4 mr-2" /> Back to Teachers
         </Button>
 
-        <div className="bg-white rounded-xl shadow-sm border p-6">
+        <div className="bg-card rounded-2xl shadow-card border border-border p-6 sm:p-8">
           <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
             <GraduationCap className="h-5 w-5 text-primary" /> New Teacher Account
           </h2>
 
           {error && (
-            <div className="bg-red-50 text-red-700 px-4 py-3 rounded-lg flex items-center gap-2 mb-4">
+            <div className="bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400 px-4 py-3 rounded-xl flex items-center gap-2 mb-4">
               <AlertCircle className="h-4 w-4 flex-shrink-0" /> {error}
             </div>
           )}
@@ -128,22 +128,22 @@ export default function AdminCreateTeacher() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="name">Full Name *</Label>
-                <Input id="name" placeholder="Ahmed Khan" value={form.name} onChange={(e) => updateField("name", e.target.value)} />
+                <Input id="name" className="h-11 rounded-xl" placeholder="Ahmed Khan" value={form.name} onChange={(e) => updateField("name", e.target.value)} />
               </div>
               <div>
                 <Label htmlFor="email">Email *</Label>
-                <Input id="email" type="email" placeholder="teacher@example.com" value={form.email} onChange={(e) => updateField("email", e.target.value)} />
+                <Input id="email" type="email" className="h-11 rounded-xl" placeholder="teacher@example.com" value={form.email} onChange={(e) => updateField("email", e.target.value)} />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="password">Password *</Label>
-                <Input id="password" type="password" placeholder="Minimum 6 characters" value={form.password} onChange={(e) => updateField("password", e.target.value)} />
+                <Input id="password" type="password" className="h-11 rounded-xl" placeholder="Minimum 6 characters" value={form.password} onChange={(e) => updateField("password", e.target.value)} />
               </div>
               <div>
                 <Label htmlFor="country">Country</Label>
-                <Input id="country" placeholder="Pakistan" value={form.country} onChange={(e) => updateField("country", e.target.value)} />
+                <Input id="country" className="h-11 rounded-xl" placeholder="Pakistan" value={form.country} onChange={(e) => updateField("country", e.target.value)} />
               </div>
             </div>
 
@@ -158,8 +158,8 @@ export default function AdminCreateTeacher() {
                     onClick={() => toggleSubject(sub)}
                     className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
                       subjects.includes(sub)
-                        ? "bg-primary text-white border-primary"
-                        : "bg-gray-50 text-gray-700 border-gray-200 hover:border-primary/50"
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-muted text-muted-foreground border-border hover:border-primary/50"
                     }`}
                   >
                     {sub.charAt(0).toUpperCase() + sub.slice(1)}
@@ -173,12 +173,13 @@ export default function AdminCreateTeacher() {
               <Label>Languages</Label>
               <div className="flex gap-2 mt-1">
                 <Input
+                  className="h-11 rounded-xl"
                   placeholder="e.g. Urdu, English, Arabic"
                   value={form.languageInput}
                   onChange={(e) => updateField("languageInput", e.target.value)}
                   onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addLanguage(); } }}
                 />
-                <Button type="button" variant="outline" onClick={addLanguage}>Add</Button>
+                <Button type="button" variant="outline" className="rounded-xl h-11" onClick={addLanguage}>Add</Button>
               </div>
               {languages.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
@@ -198,7 +199,7 @@ export default function AdminCreateTeacher() {
               <textarea
                 id="bio"
                 rows={3}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className="w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-none"
                 placeholder="Brief description of the teacher..."
                 value={form.bio}
                 onChange={(e) => updateField("bio", e.target.value)}
@@ -208,12 +209,12 @@ export default function AdminCreateTeacher() {
 
             <div className="w-full sm:w-1/2">
               <Label htmlFor="rate">Hourly Rate (PKR)</Label>
-              <Input id="rate" type="number" min="0" placeholder="0" value={form.hourlyRate} onChange={(e) => updateField("hourlyRate", e.target.value)} />
+              <Input id="rate" type="number" className="h-11 rounded-xl" min="0" placeholder="0" value={form.hourlyRate} onChange={(e) => updateField("hourlyRate", e.target.value)} />
             </div>
 
             <div className="flex justify-end gap-3 pt-4 border-t">
-              <Button type="button" variant="outline" onClick={() => navigate("/admin/teachers")}>Cancel</Button>
-              <Button type="submit" disabled={loading}>
+              <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate("/admin/teachers")}>Cancel</Button>
+              <Button type="submit" disabled={loading} className="gradient-primary text-primary-foreground border-0 rounded-xl px-6 font-semibold shadow-lg shadow-primary/20">
                 {loading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Plus className="h-4 w-4 mr-2" />}
                 Create Teacher
               </Button>

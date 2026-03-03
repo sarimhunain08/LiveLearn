@@ -83,13 +83,13 @@ export default function BrowseClasses() {
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search classes..."
-            className="pl-10"
+            className="pl-10 h-11 rounded-xl"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <Select value={selectedSubject} onValueChange={setSelectedSubject}>
-          <SelectTrigger className="w-full sm:w-40"><SelectValue placeholder="Subject" /></SelectTrigger>
+          <SelectTrigger className="w-full sm:w-40 h-11 rounded-xl"><SelectValue placeholder="Subject" /></SelectTrigger>
           <SelectContent>
             {subjects.map(s => (
               <SelectItem key={s} value={s.toLowerCase()}>{s}</SelectItem>

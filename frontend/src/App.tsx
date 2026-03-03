@@ -1,44 +1,58 @@
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { Loader2 } from "lucide-react";
 
-import Index from "./pages/Index";
-import Login from "./pages/Login";
-import NotFound from "./pages/NotFound";
-import MonthlyFee from "./pages/MonthlyFee";
-import ContactUs from "./pages/ContactUs";
+// Lazy-loaded pages — each is a separate chunk loaded on demand
+const Index = lazy(() => import("./pages/Index"));
+const Login = lazy(() => import("./pages/Login"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const MonthlyFee = lazy(() => import("./pages/MonthlyFee"));
+const ContactUs = lazy(() => import("./pages/ContactUs"));
 
-import TeacherDashboard from "./pages/teacher/TeacherDashboard";
-import CreateClass from "./pages/teacher/CreateClass";
-import TeacherClasses from "./pages/teacher/TeacherClasses";
-import TeacherStudents from "./pages/teacher/TeacherStudents";
+const TeacherDashboard = lazy(() => import("./pages/teacher/TeacherDashboard"));
+const CreateClass = lazy(() => import("./pages/teacher/CreateClass"));
+const TeacherClasses = lazy(() => import("./pages/teacher/TeacherClasses"));
+const TeacherStudents = lazy(() => import("./pages/teacher/TeacherStudents"));
 
-import StudentDashboard from "./pages/student/StudentDashboard";
-import BrowseTeachers from "./pages/student/BrowseTeachers";
-import StudentClasses from "./pages/student/StudentClasses";
-import ClassDetail from "./pages/student/ClassDetail";
-import TeacherProfile from "./pages/student/TeacherProfile";
-import MyTeachers from "./pages/student/MyTeachers";
-import MeetingRoom from "./pages/MeetingRoom";
+const StudentDashboard = lazy(() => import("./pages/student/StudentDashboard"));
+const BrowseTeachers = lazy(() => import("./pages/student/BrowseTeachers"));
+const StudentClasses = lazy(() => import("./pages/student/StudentClasses"));
+const ClassDetail = lazy(() => import("./pages/student/ClassDetail"));
+const TeacherProfile = lazy(() => import("./pages/student/TeacherProfile"));
+const MyTeachers = lazy(() => import("./pages/student/MyTeachers"));
+const MeetingRoom = lazy(() => import("./pages/MeetingRoom"));
 
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminTeachers from "./pages/admin/AdminTeachers";
-import AdminStudents from "./pages/admin/AdminStudents";
-import AdminClasses from "./pages/admin/AdminClasses";
-import AdminReports from "./pages/admin/AdminReports";
-import AdminContacts from "./pages/admin/AdminContacts";
-import AdminCreateTeacher from "./pages/admin/AdminCreateTeacher";
-import AdminCreateStudent from "./pages/admin/AdminCreateStudent";
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+const AdminTeachers = lazy(() => import("./pages/admin/AdminTeachers"));
+const AdminStudents = lazy(() => import("./pages/admin/AdminStudents"));
+const AdminClasses = lazy(() => import("./pages/admin/AdminClasses"));
+const AdminReports = lazy(() => import("./pages/admin/AdminReports"));
+const AdminContacts = lazy(() => import("./pages/admin/AdminContacts"));
+const AdminCreateTeacher = lazy(() => import("./pages/admin/AdminCreateTeacher"));
+const AdminCreateStudent = lazy(() => import("./pages/admin/AdminCreateStudent"));
 
-import SettingsPage from "./pages/SettingsPage";
+const SettingsPage = lazy(() => import("./pages/SettingsPage"));
+
+// Full-screen loading spinner shown while lazy chunks load
+const PageLoader = () => (
+  <div className="flex h-screen w-full items-center justify-center bg-background">
+    <div className="flex flex-col items-center gap-3">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <p className="text-sm text-muted-foreground">Loading...</p>
+    </div>
+  </div>
+);
 
 const App = () => (
   <AuthProvider>
     <TooltipProvider>
       <Toaster />
       <BrowserRouter>
+        <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/pricing" element={<MonthlyFee />} />
@@ -76,6 +90,7 @@ const App = () => (
 
             <Route path="*" element={<NotFound />} />
           </Routes>
+        </Suspense>
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>

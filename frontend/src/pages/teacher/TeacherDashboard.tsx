@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Loader2, Video, Calendar, TrendingUp, Clock, Square } from "lucide-react";
+import { Loader2, Video, Calendar, TrendingUp, Clock, Square, Plus, Users, BookOpen } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatCard from "@/components/dashboard/StatCard";
 import StatusBadge from "@/components/dashboard/StatusBadge";

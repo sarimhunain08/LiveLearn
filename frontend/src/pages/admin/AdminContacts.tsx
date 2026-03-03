@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import {
-  Loader2, AlertCircle, Trash2, Eye, X, MessageSquare, Clock
+  Loader2, AlertCircle, Trash2, Eye, X, MessageSquare, Clock, Mail
 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatusBadge from "@/components/dashboard/StatusBadge";
@@ -60,7 +60,7 @@ export default function AdminContacts() {
     }
   };
 
-  const handleStatusChange = async (id: string, status: string) => {
+  const handleStatusChange = async (id: string, status: Contact["status"]) => {
     setActionLoading(id);
     try {
       await api.updateAdminContact(id, { status });
@@ -93,9 +93,9 @@ export default function AdminContacts() {
 
   return (
     <DashboardLayout navItems={navItems} title="Contact Messages">
-      <div className="mb-4 flex flex-wrap gap-3 items-center justify-between">
+      <div className="mb-6 flex flex-wrap gap-3 items-center justify-between">
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-36"><SelectValue placeholder="Filter" /></SelectTrigger>
+          <SelectTrigger className="w-36 h-11 rounded-xl"><SelectValue placeholder="Filter" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All</SelectItem>
             <SelectItem value="new">New</SelectItem>
@@ -151,7 +151,7 @@ export default function AdminContacts() {
               </a>
               <Select
                 value={selectedContact.status}
-                onValueChange={(v) => handleStatusChange(selectedContact._id, v)}
+                onValueChange={(v) => handleStatusChange(selectedContact._id, v as Contact["status"])}
               >
                 <SelectTrigger className="h-8 w-28 text-xs">
                   <SelectValue />

@@ -202,6 +202,7 @@ export default function ContactUs() {
                         id="name"
                         name="name"
                         placeholder="John Doe"
+                        className="h-11 rounded-xl"
                         required
                         value={formData.name}
                         onChange={handleChange}
@@ -214,6 +215,7 @@ export default function ContactUs() {
                         name="email"
                         type="email"
                         placeholder="john@example.com"
+                        className="h-11 rounded-xl"
                         required
                         value={formData.email}
                         onChange={handleChange}
@@ -230,7 +232,7 @@ export default function ContactUs() {
                         if (error) setError(null);
                       }}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="h-11 rounded-xl">
                         <SelectValue placeholder="Select a topic" />
                       </SelectTrigger>
                       <SelectContent>
@@ -255,7 +257,7 @@ export default function ContactUs() {
                       placeholder="How can we help you?"
                       value={formData.message}
                       onChange={handleChange}
-                      className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring resize-none"
+                      className="flex w-full rounded-xl border border-input bg-transparent px-3 py-2.5 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-none"
                     />
                   </div>
 

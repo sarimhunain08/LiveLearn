@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Loader2, Video } from "lucide-react";
+import { Loader2, Video, BookOpen } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatusBadge from "@/components/dashboard/StatusBadge";
 import { Button } from "@/components/ui/button";
