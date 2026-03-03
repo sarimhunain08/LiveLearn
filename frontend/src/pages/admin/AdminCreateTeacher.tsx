@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Loader2, AlertCircle, CheckCircle2, ArrowLeft, Plus, X,
+  Loader2, AlertCircle, CheckCircle2, ArrowLeft, Plus, X, GraduationCap,
 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Input } from "@/components/ui/input";
