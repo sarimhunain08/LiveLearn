@@ -14,7 +14,32 @@ connectDB();
 
 const app = express();
 
-// Security headers
+// CORS — explicitly allow production + local origins (MUST be before helmet & other middleware)
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:8080",
+  "http://localhost:8081",
+  "http://localhost:3000",
+  "https://ilmify.online",
+  "https://www.ilmify.online",
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (mobile apps, curl, etc)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
+// Security headers (after CORS so preflight isn't blocked)
 app.use(helmet());
 
 // Body size limit (prevents memory exhaustion attacks)
@@ -42,31 +67,6 @@ const contactLimiter = rateLimit({
   message: { success: false, message: "Too many messages sent, please try again later." },
 });
 app.use("/api", generalLimiter);
-
-// CORS — explicitly allow production + local origins
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:8080",
-  "http://localhost:8081",
-  "http://localhost:3000",
-  "https://ilmify.online",
-  "https://www.ilmify.online",
-  process.env.FRONTEND_URL,
-].filter(Boolean);
-
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (mobile apps, curl, etc)
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
 
 // Routes (with specific rate limits on sensitive endpoints)
 app.use("/api/auth", authLimiter, require("./routes/auth.routes"));
