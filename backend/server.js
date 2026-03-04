@@ -14,6 +14,9 @@ connectDB();
 
 const app = express();
 
+// Trust proxy — Railway runs behind a reverse proxy
+app.set("trust proxy", 1);
+
 // CORS — explicitly allow production + local origins (MUST be before helmet & other middleware)
 const allowedOrigins = [
   "http://localhost:5173",

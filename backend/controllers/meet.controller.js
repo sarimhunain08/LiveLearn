@@ -6,8 +6,17 @@ const Class = require("../models/Class");
 // Load the JaaS private key (from env var or file)
 let privateKey;
 if (process.env.JAAS_PRIVATE_KEY) {
-  // Support newline-escaped env var (Railway stores \n as literal)
-  privateKey = process.env.JAAS_PRIVATE_KEY.replace(/\\n/g, "\n");
+  let raw = process.env.JAAS_PRIVATE_KEY;
+  // Replace literal \n sequences with real newlines
+  raw = raw.replace(/\\n/g, "\n");
+  // If PEM headers are missing, add them
+  if (!raw.includes("-----BEGIN")) {
+    // Strip any whitespace/newlines, then re-chunk to 64 chars per line
+    const base64 = raw.replace(/[\s\n\r]+/g, "");
+    const lines = base64.match(/.{1,64}/g) || [base64];
+    raw = "-----BEGIN PRIVATE KEY-----\n" + lines.join("\n") + "\n-----END PRIVATE KEY-----\n";
+  }
+  privateKey = raw;
 } else {
   try {
     const keyPath = path.resolve(__dirname, "..", process.env.JAAS_PRIVATE_KEY_PATH || "./jaas.pk");
