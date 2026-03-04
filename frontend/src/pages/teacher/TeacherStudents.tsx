@@ -1,14 +1,20 @@
 import { useState, useEffect } from "react";
-import { Loader2, Users } from "lucide-react";
+import { Loader2, Users, Search, BookOpen } from "lucide-react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import StatusBadge from "@/components/dashboard/StatusBadge";
+import { Input } from "@/components/ui/input";
 import { api } from "@/lib/api";
 import { teacherNav as navItems } from "@/lib/navItems";
 import { User } from "@/lib/types";
 
+interface StudentUser extends User {
+  type?: string;
+  enrolledClasses?: number;
+}
+
 export default function TeacherStudents() {
-  const [students, setStudents] = useState<User[]>([]);
+  const [students, setStudents] = useState<StudentUser[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -24,6 +30,13 @@ export default function TeacherStudents() {
     fetchStudents();
   }, []);
 
+  const filtered = students.filter(s =>
+    !search || s.name?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const enrolledCount = students.filter(s => s.type === "enrolled").length;
+  const subscriberCount = students.length - enrolledCount;
+
   if (loading) {
     return (
       <DashboardLayout navItems={navItems} title="Students">
@@ -36,80 +49,108 @@ export default function TeacherStudents() {
 
   return (
     <DashboardLayout navItems={navItems} title="Students">
-      <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
-        <div className="border-b border-border px-4 sm:px-6 py-4">
-          <h2 className="text-base sm:text-lg font-semibold text-foreground">All Students ({students.length})</h2>
-        </div>
-        {students.length === 0 ? (
-          <div className="py-16 text-center">
-            <Users className="mx-auto mb-4 h-12 w-12 text-muted-foreground/30" />
-            <p className="text-muted-foreground">No students enrolled yet</p>
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div>
+          <h2 className="text-xl font-bold text-foreground">Your Students</h2>
+          <div className="flex items-center gap-3 mt-1">
+            <span className="text-sm text-muted-foreground">{students.length} total</span>
+            {enrolledCount > 0 && (
+              <span className="text-xs text-muted-foreground">{enrolledCount} enrolled</span>
+            )}
+            {subscriberCount > 0 && (
+              <span className="text-xs text-muted-foreground">{subscriberCount} subscribers</span>
+            )}
           </div>
-        ) : (
-          <>
-            {/* Mobile card view */}
-            <div className="sm:hidden divide-y divide-border">
-              {students.map((s) => (
-                <div key={s._id} className="p-4 space-y-2">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary flex-shrink-0">
-                      {s.name?.charAt(0) || "?"}
+        </div>
+        <div className="relative sm:w-72">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search students..."
+            className="pl-9 h-10 rounded-xl border-border/60 focus:border-primary/30"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {filtered.length === 0 ? (
+        <div className="rounded-2xl border border-border/60 bg-card py-20 text-center">
+          <Users className="mx-auto mb-3 h-10 w-10 text-muted-foreground/20" />
+          <p className="text-sm font-medium text-muted-foreground mb-1">
+            {search ? "No students match your search" : "No students yet"}
+          </p>
+          <p className="text-xs text-muted-foreground/60">
+            {search ? "Try a different search term" : "Students will appear here when they enroll or subscribe"}
+          </p>
+        </div>
+      ) : (
+        <div className="rounded-2xl border border-border/60 bg-card overflow-hidden">
+          {/* Mobile rows */}
+          <div className="sm:hidden divide-y divide-border/50">
+            {filtered.map((s) => (
+              <div key={s._id} className="p-4 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-primary text-xs font-bold text-primary-foreground">
+                      {s.name?.charAt(0)?.toUpperCase() || "?"}
                     </div>
-                    <div className="min-w-0">
-                      <p className="font-medium text-foreground text-sm truncate">{s.name}</p>
-                      <p className="text-xs text-muted-foreground truncate">{s.email}</p>
-                    </div>
+                    <span className="font-semibold text-foreground text-sm">{s.name}</span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
-                        s.type === "enrolled" ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent"
+                  <span className={`rounded-md px-2 py-0.5 text-[10px] font-semibold ring-1 ring-inset ${
+                    s.type === "enrolled"
+                      ? "bg-primary/10 text-primary ring-primary/20"
+                      : "bg-muted text-muted-foreground ring-border"
+                  }`}>
+                    {s.type === "enrolled" ? "Enrolled" : "Subscriber"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground pl-10">
+                  <BookOpen className="h-3 w-3" />
+                  <span>{s.enrolledClasses || 0} classes</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop table */}
+          <div className="hidden sm:block overflow-x-auto">
+            <table className="dashboard-table">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Type</th>
+                  <th>Classes Enrolled</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((s) => (
+                  <tr key={s._id}>
+                    <td>
+                      <div className="flex items-center gap-2.5">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-primary text-xs font-bold text-primary-foreground">
+                          {s.name?.charAt(0)?.toUpperCase() || "?"}
+                        </div>
+                        <span className="font-medium text-foreground">{s.name}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <span className={`rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset ${
+                        s.type === "enrolled"
+                          ? "bg-primary/10 text-primary ring-primary/20"
+                          : "bg-muted text-muted-foreground ring-border"
                       }`}>
                         {s.type === "enrolled" ? "Enrolled" : "Subscriber"}
                       </span>
-                      <span className="text-xs text-muted-foreground">{s.enrolledClasses || 0} classes</span>
-                    </div>
-                    <StatusBadge status="Active" />
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Desktop table view */}
-            <div className="hidden sm:block overflow-x-auto">
-              <table className="dashboard-table">
-                <thead>
-                  <tr><th>Name</th><th>Email</th><th>Enrolled Classes</th><th>Type</th><th>Status</th></tr>
-                </thead>
-                <tbody>
-                  {students.map((s) => (
-                    <tr key={s._id}>
-                      <td className="font-medium text-foreground">
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary flex-shrink-0">
-                            {s.name?.charAt(0) || "?"}
-                          </div>
-                          {s.name}
-                        </div>
-                      </td>
-                      <td className="text-muted-foreground">{s.email}</td>
-                      <td className="text-muted-foreground">{s.enrolledClasses || 0}</td>
-                      <td>
-                        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                          s.type === "enrolled" ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent"
-                        }`}>
-                          {s.type === "enrolled" ? "Enrolled" : "Subscriber"}
-                        </span>
-                      </td>
-                      <td><StatusBadge status="Active" /></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </>
-        )}
-      </div>
+                    </td>
+                    <td className="text-muted-foreground">{s.enrolledClasses || 0}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </DashboardLayout>
   );
 }
