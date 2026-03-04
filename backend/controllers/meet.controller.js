@@ -38,7 +38,12 @@ exports.getJitsiToken = async (req, res, next) => {
     }
 
     // Validate that the roomName maps to a real class the user has access to
-    const cls = await Class.findById(roomName.replace(/^class-/, ""));
+    // roomName format: "Ilmify_<classId>" or "class-<classId>" or just "<classId>"
+    const classId = roomName.replace(/^(Ilmify_|class-)/, "");
+    const mongoose = require("mongoose");
+    const cls = mongoose.Types.ObjectId.isValid(classId)
+      ? await Class.findById(classId)
+      : null;
     if (cls) {
       const userId = req.user.id;
       const isTeacher = cls.teacher.toString() === userId;
