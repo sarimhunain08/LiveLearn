@@ -4,14 +4,17 @@ import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { api } from "@/lib/api";
 import { teacherNav as navItems } from "@/lib/navItems";
 import { getErrorMessage } from "@/lib/types";
 
-const subjects = ["Math", "Science", "English", "History", "Art", "Music", "Programming", "Arabic"];
+const subjects = [
+  "Quran", "Tajweed", "Islamic Studies", "Arabic", "Urdu",
+  "Math", "Science", "English", "History", "Programming",
+  "Art", "Music", "Other",
+];
 
 export default function CreateClass() {
   const [showSuccess, setShowSuccess] = useState(false);
@@ -20,14 +23,15 @@ export default function CreateClass() {
   // Form state
   const [title, setTitle] = useState("");
   const [subject, setSubject] = useState("");
+  const [customSubject, setCustomSubject] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [duration, setDuration] = useState("");
   const [maxStudents, setMaxStudents] = useState(50);
-  const [chat, setChat] = useState(true);
-  const [screenShare, setScreenShare] = useState(true);
-  const [recording, setRecording] = useState(false);
+
+  // Today's date in YYYY-MM-DD for min attribute
+  const today = new Date().toISOString().split("T")[0];
 
   const { toast } = useToast();
   const [attempted, setAttempted] = useState(false);
@@ -35,14 +39,12 @@ export default function CreateClass() {
   const resetForm = () => {
     setTitle("");
     setSubject("");
+    setCustomSubject("");
     setDescription("");
     setDate("");
     setTime("");
     setDuration("");
     setMaxStudents(50);
-    setChat(true);
-    setScreenShare(true);
-    setRecording(false);
     setShowSuccess(false);
     setAttempted(false);
   };
@@ -51,10 +53,11 @@ export default function CreateClass() {
     e.preventDefault();
     setAttempted(true);
 
-    if (!subject || !duration) {
+    const finalSubject = subject === "other" ? customSubject.trim() : subject;
+    if (!finalSubject || !duration) {
       toast({
         title: "Missing fields",
-        description: `Please select ${!subject ? "a subject" : ""}${!subject && !duration ? " and " : ""}${!duration ? "a duration" : ""}.`,
+        description: `Please select ${!finalSubject ? "a subject" : ""}${!finalSubject && !duration ? " and " : ""}${!duration ? "a duration" : ""}.`,
         variant: "destructive",
       });
       return;
@@ -65,9 +68,9 @@ export default function CreateClass() {
     try {
       const classData = {
         title,
-        subject,
+        subject: finalSubject,
         description,
-        date: new Date(`${date}T${time}:00`).toISOString(),
+        date,
         time,
         duration,
         maxStudents,
@@ -123,7 +126,7 @@ export default function CreateClass() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-foreground">Subject *</label>
-                  <Select value={subject} onValueChange={setSubject}>
+                  <Select value={subject} onValueChange={(val) => { setSubject(val); if (val !== "other") setCustomSubject(""); }}>
                     <SelectTrigger className={`h-11 rounded-xl ${attempted && !subject ? "ring-2 ring-destructive" : ""}`}><SelectValue placeholder="Select subject" /></SelectTrigger>
                     <SelectContent>
                       {subjects.map(s => (
@@ -131,6 +134,15 @@ export default function CreateClass() {
                       ))}
                     </SelectContent>
                   </Select>
+                  {subject === "other" && (
+                    <Input
+                      placeholder="Enter your subject"
+                      className="mt-2 h-11 rounded-xl"
+                      value={customSubject}
+                      onChange={(e) => setCustomSubject(e.target.value)}
+                      required
+                    />
+                  )}
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-foreground">Max Students</label>
@@ -150,7 +162,7 @@ export default function CreateClass() {
             <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-foreground">Date *</label>
-                <Input type="date" className="h-11 rounded-xl" value={date} onChange={(e) => setDate(e.target.value)} required />
+                <Input type="date" className="h-11 rounded-xl" value={date} onChange={(e) => setDate(e.target.value)} min={today} required />
               </div>
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-foreground">Time *</label>
@@ -170,32 +182,14 @@ export default function CreateClass() {
             </div>
           </div>
 
-          {/* Settings */}
+          {/* Info Card */}
           <div className="rounded-xl border border-border bg-card p-4 sm:p-6 shadow-card">
-            <h2 className="mb-4 text-lg font-semibold text-foreground">Meeting Settings</h2>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-foreground">Enable Chat</p>
-                  <p className="text-xs text-muted-foreground">Allow students to send messages</p>
-                </div>
-                <Switch checked={chat} onCheckedChange={setChat} />
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-foreground">Screen Sharing</p>
-                  <p className="text-xs text-muted-foreground">Share your screen during class</p>
-                </div>
-                <Switch checked={screenShare} onCheckedChange={setScreenShare} />
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-foreground">Allow Recording</p>
-                  <p className="text-xs text-muted-foreground">Record the session for later</p>
-                </div>
-                <Switch checked={recording} onCheckedChange={setRecording} />
-              </div>
-            </div>
+            <h2 className="mb-3 text-lg font-semibold text-foreground">How it works</h2>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>• <strong>Max Students</strong> limits how many students can enroll. Once full, no more enrollments.</li>
+              <li>• <strong>Duration</strong> determines when the class auto-completes. If the teacher doesn't join, it auto-cancels.</li>
+              <li>• Chat, screen sharing, and recording are managed automatically during the live meeting.</li>
+            </ul>
           </div>
 
           {/* Actions */}

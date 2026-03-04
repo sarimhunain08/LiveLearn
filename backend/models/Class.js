@@ -16,7 +16,9 @@ const classSchema = new mongoose.Schema(
     subject: {
       type: String,
       required: [true, "Subject is required"],
-      enum: ["math", "science", "english", "history", "art", "music", "programming", "arabic"],
+      trim: true,
+      lowercase: true,
+      maxlength: 50,
     },
     teacher: {
       type: mongoose.Schema.Types.ObjectId,
