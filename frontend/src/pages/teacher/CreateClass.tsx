@@ -67,11 +67,11 @@ export default function CreateClass() {
         title,
         subject,
         description,
+        date: new Date(`${date}T${time}:00`).toISOString(),
+        time,
         duration,
         maxStudents,
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        classDateTime: new Date(`${date}T${time}:00`).toISOString(),
-        settings: { chat, screenShare, recording },
       };
 
       await api.createClass(classData);
