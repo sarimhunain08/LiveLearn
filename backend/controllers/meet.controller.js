@@ -3,13 +3,18 @@ const fs = require("fs");
 const path = require("path");
 const Class = require("../models/Class");
 
-// Load the JaaS private key
+// Load the JaaS private key (from env var or file)
 let privateKey;
-try {
-  const keyPath = path.resolve(__dirname, "..", process.env.JAAS_PRIVATE_KEY_PATH || "./jaas.pk");
-  privateKey = fs.readFileSync(keyPath, "utf8");
-} catch (err) {
-  console.error("⚠️  JaaS private key not found. Meeting tokens will not work.");
+if (process.env.JAAS_PRIVATE_KEY) {
+  // Support newline-escaped env var (Railway stores \n as literal)
+  privateKey = process.env.JAAS_PRIVATE_KEY.replace(/\\n/g, "\n");
+} else {
+  try {
+    const keyPath = path.resolve(__dirname, "..", process.env.JAAS_PRIVATE_KEY_PATH || "./jaas.pk");
+    privateKey = fs.readFileSync(keyPath, "utf8");
+  } catch (err) {
+    console.error("⚠️  JaaS private key not found. Set JAAS_PRIVATE_KEY env var or provide jaas.pk file.");
+  }
 }
 
 // @desc    Generate a JaaS JWT token for Jitsi meeting
